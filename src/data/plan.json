@@ -33,11 +33,19 @@
           {
             "id": "d1-lld",
             "track": "LLD",
-            "text": "OOP pillars: encapsulation, abstraction, inheritance, polymorphism",
+            "text": "OOP pillars: encapsulation, abstraction, inheritance, polymorphism; also Hello Interview's intro and OOP concepts",
             "links": [
               {
                 "label": "OOP pillars",
                 "url": "https://codefarm.in/guides/lld/01-oop-foundations-solid"
+              },
+              {
+                "label": "intro",
+                "url": "https://www.hellointerview.com/learn/low-level-design/in-a-hurry/introduction"
+              },
+              {
+                "label": "OOP concepts",
+                "url": "https://www.hellointerview.com/learn/low-level-design/in-a-hurry/oop-concepts"
               }
             ]
           },
@@ -84,11 +92,15 @@
           {
             "id": "d2-lld",
             "track": "LLD",
-            "text": "SOLID part 1 (S, O, L) with violations and fixes",
+            "text": "SOLID part 1 (S, O, L) with violations and fixes; also Hello Interview's design principles",
             "links": [
               {
                 "label": "SOLID part 1",
                 "url": "https://codefarm.in/guides/lld/01-oop-foundations-solid"
+              },
+              {
+                "label": "design principles",
+                "url": "https://www.hellointerview.com/learn/low-level-design/in-a-hurry/design-principles"
               }
             ]
           },
@@ -135,11 +147,15 @@
           {
             "id": "d3-lld",
             "track": "LLD",
-            "text": "SOLID part 2 (I, D)",
+            "text": "SOLID part 2 (I, D); also Hello Interview's design principles",
             "links": [
               {
                 "label": "SOLID part 2",
                 "url": "https://codefarm.in/guides/lld/01-oop-foundations-solid"
+              },
+              {
+                "label": "design principles",
+                "url": "https://www.hellointerview.com/learn/low-level-design/in-a-hurry/design-principles"
               }
             ]
           },
@@ -394,7 +410,7 @@
           {
             "id": "d8-lld",
             "track": "LLD",
-            "text": "Singleton and Monostate (ref: Singleton)",
+            "text": "Singleton and Monostate (ref: Singleton); also Hello Interview's patterns page on when not to use it",
             "links": [
               {
                 "label": "Singleton and Monostate",
@@ -403,6 +419,10 @@
               {
                 "label": "Singleton",
                 "url": "https://refactoring.guru/design-patterns/singleton"
+              },
+              {
+                "label": "patterns page",
+                "url": "https://www.hellointerview.com/learn/low-level-design/in-a-hurry/patterns"
               }
             ]
           },
@@ -449,7 +469,7 @@
           {
             "id": "d9-lld",
             "track": "LLD",
-            "text": "Factory Method and Abstract Factory (ref: Factory Method, Abstract Factory)",
+            "text": "Factory Method and Abstract Factory (ref: Factory Method, Abstract Factory); also Hello Interview's patterns page (simple factory)",
             "links": [
               {
                 "label": "Factory Method and Abstract Factory",
@@ -462,6 +482,10 @@
               {
                 "label": "Abstract Factory",
                 "url": "https://refactoring.guru/design-patterns/abstract-factory"
+              },
+              {
+                "label": "patterns page",
+                "url": "https://www.hellointerview.com/learn/low-level-design/in-a-hurry/patterns"
               }
             ]
           },
@@ -508,7 +532,7 @@
           {
             "id": "d10-lld",
             "track": "LLD",
-            "text": "Builder pattern (ref: Builder)",
+            "text": "Builder pattern (ref: Builder); also Hello Interview's patterns page",
             "links": [
               {
                 "label": "Builder pattern",
@@ -517,6 +541,10 @@
               {
                 "label": "Builder",
                 "url": "https://refactoring.guru/design-patterns/builder"
+              },
+              {
+                "label": "patterns page",
+                "url": "https://www.hellointerview.com/learn/low-level-design/in-a-hurry/patterns"
               }
             ]
           },
@@ -618,7 +646,7 @@
           {
             "id": "d12-lld",
             "track": "LLD",
-            "text": "Adapter and Facade (ref: Adapter, Facade)",
+            "text": "Adapter and Facade (ref: Adapter, Facade); also Hello Interview's patterns page (Facade)",
             "links": [
               {
                 "label": "Adapter and Facade",
@@ -631,6 +659,10 @@
               {
                 "label": "Facade",
                 "url": "https://refactoring.guru/design-patterns/facade"
+              },
+              {
+                "label": "patterns page",
+                "url": "https://www.hellointerview.com/learn/low-level-design/in-a-hurry/patterns"
               }
             ]
           },
@@ -677,7 +709,7 @@
           {
             "id": "d13-lld",
             "track": "LLD",
-            "text": "Decorator and Proxy (ref: Decorator, Proxy)",
+            "text": "Decorator and Proxy (ref: Decorator, Proxy); also Hello Interview's patterns page (Decorator)",
             "links": [
               {
                 "label": "Decorator and Proxy",
@@ -690,6 +722,10 @@
               {
                 "label": "Proxy",
                 "url": "https://refactoring.guru/design-patterns/proxy"
+              },
+              {
+                "label": "patterns page",
+                "url": "https://www.hellointerview.com/learn/low-level-design/in-a-hurry/patterns"
               }
             ]
           },
@@ -731,7 +767,7 @@
           {
             "id": "d14-lld",
             "track": "LLD",
-            "text": "re-code Factory Method and Decorator from memory",
+            "text": "re-code Factory Method and Decorator from memory; check against Hello Interview's patterns page",
             "links": [
               {
                 "label": "Factory Method",
@@ -740,6 +776,10 @@
               {
                 "label": "Decorator",
                 "url": "https://refactoring.guru/design-patterns/decorator"
+              },
+              {
+                "label": "patterns page",
+                "url": "https://www.hellointerview.com/learn/low-level-design/in-a-hurry/patterns"
               }
             ]
           },
@@ -906,7 +946,7 @@
           {
             "id": "d17-lld",
             "track": "LLD",
-            "text": "Strategy and Template Method (ref: Strategy, Template Method)",
+            "text": "Strategy and Template Method (ref: Strategy, Template Method); also Hello Interview's patterns page (Strategy, the most common pattern in LLD interviews)",
             "links": [
               {
                 "label": "Strategy and Template Method",
@@ -919,6 +959,10 @@
               {
                 "label": "Template Method",
                 "url": "https://refactoring.guru/design-patterns/template-method"
+              },
+              {
+                "label": "patterns page",
+                "url": "https://www.hellointerview.com/learn/low-level-design/in-a-hurry/patterns"
               }
             ]
           },
@@ -965,7 +1009,7 @@
           {
             "id": "d18-lld",
             "track": "LLD",
-            "text": "Observer and Pub-Sub (ref: Observer)",
+            "text": "Observer and Pub-Sub (ref: Observer); also Hello Interview's patterns page",
             "links": [
               {
                 "label": "Observer and Pub-Sub",
@@ -974,6 +1018,10 @@
               {
                 "label": "Observer",
                 "url": "https://refactoring.guru/design-patterns/observer"
+              },
+              {
+                "label": "patterns page",
+                "url": "https://www.hellointerview.com/learn/low-level-design/in-a-hurry/patterns"
               }
             ]
           },
@@ -1079,7 +1127,7 @@
           {
             "id": "d20-lld",
             "track": "LLD",
-            "text": "State and Mediator (ref: State, Mediator)",
+            "text": "State and Mediator (ref: State, Mediator); also Hello Interview's patterns page (state machine)",
             "links": [
               {
                 "label": "State and Mediator",
@@ -1092,6 +1140,10 @@
               {
                 "label": "Mediator",
                 "url": "https://refactoring.guru/design-patterns/mediator"
+              },
+              {
+                "label": "patterns page",
+                "url": "https://www.hellointerview.com/learn/low-level-design/in-a-hurry/patterns"
               }
             ]
           },
@@ -1133,11 +1185,15 @@
           {
             "id": "d21-lld",
             "track": "LLD",
-            "text": "code a small order-status state machine (State)",
+            "text": "code a small order-status state machine (State, Hello Interview vending machine example)",
             "links": [
               {
                 "label": "State",
                 "url": "https://refactoring.guru/design-patterns/state"
+              },
+              {
+                "label": "Hello Interview vending machine example",
+                "url": "https://www.hellointerview.com/learn/low-level-design/in-a-hurry/patterns"
               }
             ]
           },
@@ -1406,14 +1462,22 @@
           {
             "id": "d26-lld",
             "track": "LLD",
-            "text": "Concurrency: threading docs, asyncio docs; locks and race conditions",
+            "text": "Concurrency: Hello Interview's intro and correctness; Python threading and asyncio docs",
             "links": [
               {
-                "label": "threading docs",
+                "label": "intro",
+                "url": "https://www.hellointerview.com/learn/low-level-design/concurrency/intro"
+              },
+              {
+                "label": "correctness",
+                "url": "https://www.hellointerview.com/learn/low-level-design/concurrency/correctness"
+              },
+              {
+                "label": "threading",
                 "url": "https://docs.python.org/3/library/threading.html"
               },
               {
-                "label": "asyncio docs",
+                "label": "asyncio",
                 "url": "https://docs.python.org/3/library/asyncio.html"
               }
             ]
@@ -1461,10 +1525,18 @@
           {
             "id": "d27-lld",
             "track": "LLD",
-            "text": "Problem: parking lot",
+            "text": "Problem: parking lot. Read Hello Interview's delivery framework first, then its parking lot breakdown; also Codefarm's problem guide",
             "links": [
               {
-                "label": "Problem: parking lot",
+                "label": "delivery framework",
+                "url": "https://www.hellointerview.com/learn/low-level-design/in-a-hurry/delivery"
+              },
+              {
+                "label": "parking lot breakdown",
+                "url": "https://www.hellointerview.com/learn/low-level-design/problem-breakdowns/parking-lot"
+              },
+              {
+                "label": "problem guide",
                 "url": "https://codefarm.in/guides/lld/06-lld-interview-problems"
               }
             ]
@@ -1507,10 +1579,14 @@
           {
             "id": "d28-lld",
             "track": "LLD",
-            "text": "code the parking lot's core classes with one test (problem guide)",
+            "text": "code the parking lot's core classes with one test (Hello Interview breakdown, Codefarm problem guide)",
             "links": [
               {
-                "label": "problem guide",
+                "label": "Hello Interview breakdown",
+                "url": "https://www.hellointerview.com/learn/low-level-design/problem-breakdowns/parking-lot"
+              },
+              {
+                "label": "Codefarm problem guide",
                 "url": "https://codefarm.in/guides/lld/06-lld-interview-problems"
               }
             ]
@@ -1572,10 +1648,14 @@
           {
             "id": "d29-lld",
             "track": "LLD",
-            "text": "Problem: elevator system",
+            "text": "Problem: elevator system (Hello Interview breakdown, Codefarm problem guide)",
             "links": [
               {
-                "label": "Problem: elevator system",
+                "label": "Hello Interview breakdown",
+                "url": "https://www.hellointerview.com/learn/low-level-design/problem-breakdowns/elevator"
+              },
+              {
+                "label": "Codefarm problem guide",
                 "url": "https://codefarm.in/guides/lld/06-lld-interview-problems"
               }
             ]
@@ -1776,10 +1856,18 @@
           {
             "id": "d33-lld",
             "track": "LLD",
-            "text": "Problem: movie ticket booking (seat locking)",
+            "text": "Problem: movie ticket booking with seat locking (Hello Interview breakdown, scarcity, Codefarm problem guide)",
             "links": [
               {
-                "label": "Problem: movie ticket booking",
+                "label": "Hello Interview breakdown",
+                "url": "https://www.hellointerview.com/learn/low-level-design/problem-breakdowns/bookmyshow"
+              },
+              {
+                "label": "scarcity",
+                "url": "https://www.hellointerview.com/learn/low-level-design/concurrency/scarcity"
+              },
+              {
+                "label": "Codefarm problem guide",
                 "url": "https://codefarm.in/guides/lld/06-lld-interview-problems"
               }
             ]
@@ -1873,10 +1961,14 @@
           {
             "id": "d35-lld",
             "track": "LLD",
-            "text": "redo hotel or movie booking in code, with locking (problem guide)",
+            "text": "redo hotel or movie booking in code, with locking (Hello Interview movie booking, Codefarm problem guide)",
             "links": [
               {
-                "label": "problem guide",
+                "label": "Hello Interview movie booking",
+                "url": "https://www.hellointerview.com/learn/low-level-design/problem-breakdowns/bookmyshow"
+              },
+              {
+                "label": "Codefarm problem guide",
                 "url": "https://codefarm.in/guides/lld/06-lld-interview-problems"
               }
             ]
@@ -1925,10 +2017,14 @@
           {
             "id": "d36-lld",
             "track": "LLD",
-            "text": "Problem: logger framework",
+            "text": "Problem: logger framework (Hello Interview logging service, Codefarm problem guide)",
             "links": [
               {
-                "label": "Problem: logger framework",
+                "label": "Hello Interview logging service",
+                "url": "https://www.hellointerview.com/learn/low-level-design/problem-breakdowns/logging-service"
+              },
+              {
+                "label": "Codefarm problem guide",
                 "url": "https://codefarm.in/guides/lld/06-lld-interview-problems"
               }
             ]
@@ -2078,10 +2174,14 @@
           {
             "id": "d39-lld",
             "track": "LLD",
-            "text": "Problem: rate limiter (token bucket, sliding window)",
+            "text": "Problem: rate limiter with token bucket and sliding window (Hello Interview breakdown, Codefarm problem guide)",
             "links": [
               {
-                "label": "Problem: rate limiter",
+                "label": "Hello Interview breakdown",
+                "url": "https://www.hellointerview.com/learn/low-level-design/problem-breakdowns/rate-limiter"
+              },
+              {
+                "label": "Codefarm problem guide",
                 "url": "https://codefarm.in/guides/lld/06-lld-interview-problems"
               }
             ]
@@ -2129,11 +2229,15 @@
           {
             "id": "d40-lld",
             "track": "LLD",
-            "text": "Problem: pub-sub system",
+            "text": "Problem: pub-sub system (Codefarm problem guide; Hello Interview's coordination for the producer-consumer side)",
             "links": [
               {
-                "label": "Problem: pub-sub system",
+                "label": "Codefarm problem guide",
                 "url": "https://codefarm.in/guides/lld/06-lld-interview-problems"
+              },
+              {
+                "label": "coordination",
+                "url": "https://www.hellointerview.com/learn/low-level-design/concurrency/coordination"
               }
             ]
           },
@@ -2221,11 +2325,15 @@
           {
             "id": "d42-lld",
             "track": "LLD",
-            "text": "code LRU/LFU with a test and a thread-safe variant (problem guide)",
+            "text": "code LRU/LFU with a test and a thread-safe variant (Codefarm problem guide, Hello Interview correctness)",
             "links": [
               {
-                "label": "problem guide",
+                "label": "Codefarm problem guide",
                 "url": "https://codefarm.in/guides/lld/06-lld-interview-problems"
+              },
+              {
+                "label": "Hello Interview correctness",
+                "url": "https://www.hellointerview.com/learn/low-level-design/concurrency/correctness"
               }
             ]
           },
@@ -2573,11 +2681,15 @@
           {
             "id": "d49-lld",
             "track": "LLD",
-            "text": "mock, 25 min: a problem you haven't done, such as a library or bike rental system (problem guide)",
+            "text": "mock, 25 min: a problem you haven't done, either Amazon Locker or Inventory Management; attempt it before reading the breakdown",
             "links": [
               {
-                "label": "problem guide",
-                "url": "https://codefarm.in/guides/lld/06-lld-interview-problems"
+                "label": "Amazon Locker",
+                "url": "https://www.hellointerview.com/learn/low-level-design/problem-breakdowns/amazon-locker"
+              },
+              {
+                "label": "Inventory Management",
+                "url": "https://www.hellointerview.com/learn/low-level-design/problem-breakdowns/inventory-management"
               }
             ]
           },
@@ -2625,10 +2737,14 @@
           {
             "id": "d50-lld",
             "track": "LLD",
-            "text": "Timed redo: parking lot",
+            "text": "Timed redo: parking lot (Hello Interview breakdown, Codefarm problem guide)",
             "links": [
               {
-                "label": "Timed redo: parking lot",
+                "label": "Hello Interview breakdown",
+                "url": "https://www.hellointerview.com/learn/low-level-design/problem-breakdowns/parking-lot"
+              },
+              {
+                "label": "Codefarm problem guide",
                 "url": "https://codefarm.in/guides/lld/06-lld-interview-problems"
               }
             ]
@@ -2671,10 +2787,14 @@
           {
             "id": "d51-lld",
             "track": "LLD",
-            "text": "Timed redo: elevator",
+            "text": "Timed redo: elevator (Hello Interview breakdown, Codefarm problem guide)",
             "links": [
               {
-                "label": "Timed redo: elevator",
+                "label": "Hello Interview breakdown",
+                "url": "https://www.hellointerview.com/learn/low-level-design/problem-breakdowns/elevator"
+              },
+              {
+                "label": "Codefarm problem guide",
                 "url": "https://codefarm.in/guides/lld/06-lld-interview-problems"
               }
             ]
@@ -2717,10 +2837,14 @@
           {
             "id": "d52-lld",
             "track": "LLD",
-            "text": "Timed redo: movie ticket booking",
+            "text": "Timed redo: movie ticket booking (Hello Interview breakdown, Codefarm problem guide)",
             "links": [
               {
-                "label": "Timed redo: movie ticket booking",
+                "label": "Hello Interview breakdown",
+                "url": "https://www.hellointerview.com/learn/low-level-design/problem-breakdowns/bookmyshow"
+              },
+              {
+                "label": "Codefarm problem guide",
                 "url": "https://codefarm.in/guides/lld/06-lld-interview-problems"
               }
             ]
@@ -2814,10 +2938,14 @@
           {
             "id": "d54-lld",
             "track": "LLD",
-            "text": "Timed redo: rate limiter",
+            "text": "Timed redo: rate limiter (Hello Interview breakdown, Codefarm problem guide)",
             "links": [
               {
-                "label": "Timed redo: rate limiter",
+                "label": "Hello Interview breakdown",
+                "url": "https://www.hellointerview.com/learn/low-level-design/problem-breakdowns/rate-limiter"
+              },
+              {
+                "label": "Codefarm problem guide",
                 "url": "https://codefarm.in/guides/lld/06-lld-interview-problems"
               }
             ]
@@ -2896,11 +3024,15 @@
           {
             "id": "d56-lld",
             "track": "LLD",
-            "text": "one new problem, 25 min (problem guide)",
+            "text": "one new problem, 25 min: Connect Four or File System; attempt it before reading the breakdown",
             "links": [
               {
-                "label": "problem guide",
-                "url": "https://codefarm.in/guides/lld/06-lld-interview-problems"
+                "label": "Connect Four",
+                "url": "https://www.hellointerview.com/learn/low-level-design/problem-breakdowns/connect-four"
+              },
+              {
+                "label": "File System",
+                "url": "https://www.hellointerview.com/learn/low-level-design/problem-breakdowns/file-system"
               }
             ]
           },

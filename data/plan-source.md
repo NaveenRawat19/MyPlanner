@@ -1,116 +1,3 @@
-# DSA and System Design Study Topics
-
-*A topic checklist for AI Engineer, Applied AI, Full Stack and SWE interviews*
-
-## DSA topics
-
-You've solved 500+ problems, so don't redo the basics. For each topic, solve one timed Medium: if you pass in 35 minutes, skip it, and if you fail, drill it.
-
-### Tier 1 (asked constantly)
-
-- Hashing, two pointers, sliding window, prefix sums
-- Binary search, including "binary search on the answer"
-- Stack and monotonic stack, linked lists
-- Trees and BST: traversals, LCA, serialization
-- BFS/DFS on graphs and grids
-- Heaps and top-K
-- Intervals, greedy
-- Backtracking
-- DP: 1D, 2D, knapsack, LIS, LCS, partitions
-
-### Tier 2 (often asked)
-
-- Graph algorithms: topological sort, union-find, Dijkstra
-- Tries
-- Design-style problems: LRU/LFU cache, min stack, iterators
-- Bit manipulation, matrix problems
-
-### Tier 3 (hard rounds and FAANG-level)
-
-- Advanced DP: bitmask, interval DP, DP on trees
-- Dijkstra variants, 0-1 BFS, MST
-- Segment tree / Fenwick tree (rare, but it happens)
-
-Alongside all of it, practice stating time and space complexity out loud.
-
-## System design topics
-
-### Fundamentals
-
-- Requirements: functional vs non-functional
-- Back-of-envelope estimation
-- API design, data modeling
-- SQL vs NoSQL tradeoffs
-
-### Building blocks
-
-Know the tradeoff, not just the definition.
-
-- Load balancing, caching and invalidation, CDNs
-- Indexing, replication, sharding, consistent hashing
-- CAP/PACELC, consistency models, transactions and isolation levels
-- Queues and streams (Kafka-style), pub/sub, idempotency, retries, backpressure
-- Rate limiting, circuit breakers
-- WebSockets vs polling, blob storage, search (inverted index)
-- AuthN/AuthZ (JWT, OAuth), observability
-
-### Classic designs to practice
-
-- URL shortener, rate limiter, notification system
-- Chat, news feed, key-value store
-- Job scheduler, file storage, web crawler, typeahead
-
-### AI system design (essential for your target roles)
-
-- RAG system with citations
-- LLM gateway: routing, fallbacks, caching, cost control
-- Agent platform: orchestration, tool permissions, human-in-the-loop, audit
-- Eval and observability pipeline
-- Async document-processing pipeline
-- Guardrails and prompt-injection defense
-
-### Your hooks
-
-You can draw on your own experience for queues (Celery/Redis), real-time systems (SyncFlix), orchestration with failure isolation (the patch orchestrator), and audit and RBAC (the MCP platform). Interviewers like designs grounded in systems you've actually run.
-
-## Full topic list from the Codefarm roadmaps
-
-Together, the [LLD roadmap](https://codefarm.in/roadmap/lld) and the [System Design roadmap](https://codefarm.in/roadmap/system-design) cover most of what you need. The 2-hour plan below follows their order.
-
-### HLD: 9 phases, 58 skills
-
-- **Phase 1, foundations:** networking basics, client-server architecture, SQL fundamentals, NoSQL overview, basic system concepts
-- **Phase 2, building blocks:** load balancing, caching strategies, message queues and brokers, API design and gateways, replication and sharding, consistency and consensus
-- **Phase 3, distributed systems:** failure fallacies, distributed transactions and sagas, service discovery and configuration, distributed caching and CDNs, distributed data stores, fault tolerance and resilience
-- **Phase 4, core algorithms:** consistent hashing, Bloom filters, write-ahead log, Raft, Paxos and 2PC/3PC, Merkle trees and anti-entropy, vector clocks, LRU/LFU and TinyLFU, Snowflake IDs, quorum reads and writes
-- **Phase 5, architecture patterns:** microservices, event-driven (event sourcing, CQRS), serverless, service mesh, domain-driven design, hexagonal and clean architecture
-- **Phase 6, Gen AI and LLM systems:** embeddings and vector databases, RAG architecture, LLM gateway and routing, prompt and semantic caching, agentic patterns and tool use, streaming and latency, guardrails and output validation, LLM observability and evaluation
-- **Phase 7, scalability:** horizontal and vertical scaling, database scaling patterns, rate limiting, observability and monitoring, CDN and edge
-- **Phase 8, security and reliability:** authentication and authorization, encryption and secrets, DDoS and WAF, disaster recovery, compliance and data governance
-- **Phase 9, real-world systems:** URL shortener, Twitter/news feed, YouTube, Uber, WhatsApp/chat, distributed search engine, trade-off analysis
-
-### LLD: 6 phases, 35 skills
-
-- **Phase 1, OOP and SOLID:** OOP pillars, SOLID, coupling and cohesion, design by contract
-- **Phase 2, creational patterns:** Singleton, Factory, Builder, Prototype
-- **Phase 3, structural patterns:** Adapter and Facade, Decorator and Proxy, Bridge and Composite, Flyweight
-- **Phase 4, behavioral patterns:** Strategy and Template Method, Observer and Pub-Sub, Command and Chain of Responsibility, State and Mediator, Iterator, Memento and Visitor
-- **Phase 5, schema and API design:** ER diagrams, REST contracts, gRPC and Protobuf, UML
-- **Phase 6, problems:** parking lot, elevator, snake and ladder, hotel booking, Splitwise, movie ticket booking, chess, logger, ATM, LRU/LFU cache, rate limiter, pub-sub, tic-tac-toe, car rental
-
-### Added beyond the roadmaps
-
-- **HLD:** back-of-envelope estimation; designs for a notification system, key-value store, job scheduler, enterprise RAG, agent platform and multi-tenant document processing
-- **LLD:** concurrency (threads, locks, asyncio), dependency injection and testing, LLM client and agent tool registry design, a DAG workflow engine
-- **Not covered by either:** Dropbox and file sync, typeahead, payments, Kubernetes. Add these only for a specific interview.
-
-## How to study each topic
-
-1. Read the concept in *Designing Data-Intensive Applications* or the System Design Primer.
-2. Explain the tradeoff aloud in 2 minutes, without notes.
-3. Apply it by designing one system on paper in 45 minutes.
-4. Redo your weakest designs a week later.
-
 ## 8-week daily plan (2 hours a day, all four tracks every day)
 
 **Daily time split (120 min):** DSA 40 min, HLD 25 min, LLD 25 min, AI 30 min. Every day has all four tracks.
@@ -121,12 +8,12 @@ Together, the [LLD roadmap](https://codefarm.in/roadmap/lld) and the [System Des
 
 - **DSA (40 min):** attempt for 30 minutes. If unsolved, read the editorial, write a one-line pattern note, and redo it on day 7.
 - **HLD (25 min):** follow the Codefarm System Design roadmap in order, one or two skills a day, using its guides as the main material and *Designing Data-Intensive Applications* for depth. Items marked skim get 10 minutes and a one-sentence explanation. Day 7 holds the designs the roadmap lacks.
-- **LLD (25 min):** follow the Codefarm LLD roadmap in order and code in Python. One session on a problem gives you requirements, classes and the key pattern, so code the full solution in that week's Day 7 review.
+- **LLD (25 min):** use [Hello Interview's LLD course](https://www.hellointerview.com/learn/low-level-design) for its delivery framework, design principles, concurrency and problem breakdowns, and the Codefarm LLD roadmap for the remaining patterns and problems. Code in Python. One session on a problem gives you requirements, classes and the key pattern, so code the full solution in that week's Day 7 review.
 - **AI (30 min):** build the capstone, a document extraction, comparison and Q&A agent over public PDFs (SEC 10-Ks or sample insurance policies). 30 minutes a day is about 28 hours in total, enough for a deployed thin product.
 
 Day 1 can be any weekday. The weeks are numbered by day, not by calendar date.
 
-**How to track:** tick each box when the task is done. Every link opens the problem or resource for that task. HLD tasks link to the [System Design roadmap](https://codefarm.in/roadmap/system-design) because I could not verify its per-skill guide URLs, so open the matching skill from its phase. LLD tasks link to the roadmap's phase guides, and pattern tasks add a Refactoring Guru reference. Meeting Rooms II and Alien Dictionary need LeetCode Premium. A task with no link is practice you do yourself.
+**How to track:** tick each box when the task is done. Every link opens the problem or resource for that task. HLD tasks link to the [System Design roadmap](https://codefarm.in/roadmap/system-design) because I could not verify its per-skill guide URLs, so open the matching skill from its phase. LLD tasks link to Hello Interview where it covers the topic (patterns, concurrency, problem breakdowns, delivery framework) and to the Codefarm phase guides for everything else; pattern tasks add a Refactoring Guru reference. Meeting Rooms II and Alien Dictionary need LeetCode Premium. A task with no link is practice you do yourself.
 
 ### Week 1: hashing, windows, stacks · HLD foundations · LLD OOP and SOLID · extraction
 
@@ -134,21 +21,21 @@ Day 1 can be any weekday. The weeks are numbered by day, not by calendar date.
 
 - [ ] **DSA:** [Group Anagrams](https://leetcode.com/problems/group-anagrams/) (hashing)
 - [ ] **HLD:** [Networking basics](https://codefarm.in/roadmap/system-design): OSI, TCP/IP, DNS, HTTP and TLS
-- [ ] **LLD:** [OOP pillars](https://codefarm.in/guides/lld/01-oop-foundations-solid): encapsulation, abstraction, inheritance, polymorphism
+- [ ] **LLD:** [OOP pillars](https://codefarm.in/guides/lld/01-oop-foundations-solid): encapsulation, abstraction, inheritance, polymorphism; also Hello Interview's [intro](https://www.hellointerview.com/learn/low-level-design/in-a-hurry/introduction) and [OOP concepts](https://www.hellointerview.com/learn/low-level-design/in-a-hurry/oop-concepts)
 - [ ] **AI:** [OpenAI tokenizer](https://platform.openai.com/tokenizer): tokens, context windows, sampling; same prompt at temperature 0 vs 1
 
 **Day 2**
 
 - [ ] **DSA:** [Longest Substring Without Repeating Characters](https://leetcode.com/problems/longest-substring-without-repeating-characters/) (sliding window)
 - [ ] **HLD:** [Client-server architecture](https://codefarm.in/roadmap/system-design), REST and HTTP
-- [ ] **LLD:** [SOLID part 1](https://codefarm.in/guides/lld/01-oop-foundations-solid) (S, O, L) with violations and fixes
+- [ ] **LLD:** [SOLID part 1](https://codefarm.in/guides/lld/01-oop-foundations-solid) (S, O, L) with violations and fixes; also Hello Interview's [design principles](https://www.hellointerview.com/learn/low-level-design/in-a-hurry/design-principles)
 - [ ] **AI:** [Pydantic docs](https://docs.pydantic.dev/latest/): structured extraction from 5 PDFs
 
 **Day 3**
 
 - [ ] **DSA:** [Subarray Sum Equals K](https://leetcode.com/problems/subarray-sum-equals-k/) (prefix sums + hashmap)
 - [ ] **HLD:** [SQL fundamentals](https://codefarm.in/roadmap/system-design): relational model, ACID
-- [ ] **LLD:** [SOLID part 2](https://codefarm.in/guides/lld/01-oop-foundations-solid) (I, D)
+- [ ] **LLD:** [SOLID part 2](https://codefarm.in/guides/lld/01-oop-foundations-solid) (I, D); also Hello Interview's [design principles](https://www.hellointerview.com/learn/low-level-design/in-a-hurry/design-principles)
 - [ ] **AI:** [PyMuPDF docs](https://pymupdf.readthedocs.io/): text vs layout vs OCR, tables
 
 **Day 4**
@@ -185,21 +72,21 @@ Day 1 can be any weekday. The weeks are numbered by day, not by calendar date.
 
 - [ ] **DSA:** [Course Schedule II](https://leetcode.com/problems/course-schedule-ii/) (topological sort)
 - [ ] **HLD:** [Caching strategies](https://codefarm.in/roadmap/system-design): cache-aside, write-through, write-back, eviction
-- [ ] **LLD:** [Singleton and Monostate](https://codefarm.in/guides/lld/02-creational-patterns) (ref: [Singleton](https://refactoring.guru/design-patterns/singleton))
+- [ ] **LLD:** [Singleton and Monostate](https://codefarm.in/guides/lld/02-creational-patterns) (ref: [Singleton](https://refactoring.guru/design-patterns/singleton)); also Hello Interview's [patterns page](https://www.hellointerview.com/learn/low-level-design/in-a-hurry/patterns) on when not to use it
 - [ ] **AI:** [OpenAI embeddings guide](https://platform.openai.com/docs/guides/embeddings): embed and search 20 chunks
 
 **Day 9**
 
 - [ ] **DSA:** [Redundant Connection](https://leetcode.com/problems/redundant-connection/) (union-find)
 - [ ] **HLD:** [Message queues and brokers](https://codefarm.in/roadmap/system-design): pub/sub, RabbitMQ vs Kafka
-- [ ] **LLD:** [Factory Method and Abstract Factory](https://codefarm.in/guides/lld/02-creational-patterns) (ref: [Factory Method](https://refactoring.guru/design-patterns/factory-method), [Abstract Factory](https://refactoring.guru/design-patterns/abstract-factory))
+- [ ] **LLD:** [Factory Method and Abstract Factory](https://codefarm.in/guides/lld/02-creational-patterns) (ref: [Factory Method](https://refactoring.guru/design-patterns/factory-method), [Abstract Factory](https://refactoring.guru/design-patterns/abstract-factory)); also Hello Interview's [patterns page](https://www.hellointerview.com/learn/low-level-design/in-a-hurry/patterns) (simple factory)
 - [ ] **AI:** [LangChain text splitters](https://python.langchain.com/docs/concepts/text_splitters/): fixed vs recursive vs heading-aware
 
 **Day 10**
 
 - [ ] **DSA:** [Network Delay Time](https://leetcode.com/problems/network-delay-time/) (Dijkstra)
 - [ ] **HLD:** [API design and gateways](https://codefarm.in/roadmap/system-design): REST, GraphQL, gRPC
-- [ ] **LLD:** [Builder pattern](https://codefarm.in/guides/lld/02-creational-patterns) (ref: [Builder](https://refactoring.guru/design-patterns/builder))
+- [ ] **LLD:** [Builder pattern](https://codefarm.in/guides/lld/02-creational-patterns) (ref: [Builder](https://refactoring.guru/design-patterns/builder)); also Hello Interview's [patterns page](https://www.hellointerview.com/learn/low-level-design/in-a-hurry/patterns)
 - [ ] **AI:** [pgvector](https://github.com/pgvector/pgvector): table, HNSW index, query
 
 **Day 11**
@@ -213,21 +100,21 @@ Day 1 can be any weekday. The weeks are numbered by day, not by calendar date.
 
 - [ ] **DSA:** [Koko Eating Bananas](https://leetcode.com/problems/koko-eating-bananas/) (binary search on the answer)
 - [ ] **HLD:** [Consistency and consensus](https://codefarm.in/roadmap/system-design): isolation levels, a first look at Raft
-- [ ] **LLD:** [Adapter and Facade](https://codefarm.in/guides/lld/03-structural-patterns) (ref: [Adapter](https://refactoring.guru/design-patterns/adapter), [Facade](https://refactoring.guru/design-patterns/facade))
+- [ ] **LLD:** [Adapter and Facade](https://codefarm.in/guides/lld/03-structural-patterns) (ref: [Adapter](https://refactoring.guru/design-patterns/adapter), [Facade](https://refactoring.guru/design-patterns/facade)); also Hello Interview's [patterns page](https://www.hellointerview.com/learn/low-level-design/in-a-hurry/patterns) (Facade)
 - [ ] **AI:** [Cross-encoder reranking](https://www.sbert.net/examples/applications/cross-encoder/README.html)
 
 **Day 13**
 
 - [ ] **DSA:** [Search in Rotated Sorted Array](https://leetcode.com/problems/search-in-rotated-sorted-array/)
 - [ ] **HLD:** [Distributed system fallacies](https://codefarm.in/roadmap/system-design) and failure modes
-- [ ] **LLD:** [Decorator and Proxy](https://codefarm.in/guides/lld/03-structural-patterns) (ref: [Decorator](https://refactoring.guru/design-patterns/decorator), [Proxy](https://refactoring.guru/design-patterns/proxy))
+- [ ] **LLD:** [Decorator and Proxy](https://codefarm.in/guides/lld/03-structural-patterns) (ref: [Decorator](https://refactoring.guru/design-patterns/decorator), [Proxy](https://refactoring.guru/design-patterns/proxy)); also Hello Interview's [patterns page](https://www.hellointerview.com/learn/low-level-design/in-a-hurry/patterns) (Decorator)
 - [ ] **AI:** [Claude citations docs](https://docs.claude.com/en/docs/build-with-claude/citations): answers with page references; refuse when nothing is retrieved
 
 **Day 14 (review)**
 
 - [ ] **DSA:** redo the problem you failed this week
 - [ ] **HLD:** design a notification system (queues, retries, fan-out); reference: [System Design Primer](https://github.com/donnemartin/system-design-primer)
-- [ ] **LLD:** re-code [Factory Method](https://refactoring.guru/design-patterns/factory-method) and [Decorator](https://refactoring.guru/design-patterns/decorator) from memory
+- [ ] **LLD:** re-code [Factory Method](https://refactoring.guru/design-patterns/factory-method) and [Decorator](https://refactoring.guru/design-patterns/decorator) from memory; check against Hello Interview's [patterns page](https://www.hellointerview.com/learn/low-level-design/in-a-hurry/patterns)
 - [ ] **AI:** [RAGAS docs](https://docs.ragas.io): 25 Q&A pairs, recall@5; explain RAG failure modes aloud
 
 ### Week 3: dynamic programming · HLD distributed systems · LLD structural and behavioral patterns · agents
@@ -250,14 +137,14 @@ Day 1 can be any weekday. The weeks are numbered by day, not by calendar date.
 
 - [ ] **DSA:** [Edit Distance](https://leetcode.com/problems/edit-distance/) (2D DP)
 - [ ] **HLD:** [Distributed caching and CDNs](https://codefarm.in/roadmap/system-design)
-- [ ] **LLD:** [Strategy and Template Method](https://codefarm.in/guides/lld/04-behavioral-patterns) (ref: [Strategy](https://refactoring.guru/design-patterns/strategy), [Template Method](https://refactoring.guru/design-patterns/template-method))
+- [ ] **LLD:** [Strategy and Template Method](https://codefarm.in/guides/lld/04-behavioral-patterns) (ref: [Strategy](https://refactoring.guru/design-patterns/strategy), [Template Method](https://refactoring.guru/design-patterns/template-method)); also Hello Interview's [patterns page](https://www.hellointerview.com/learn/low-level-design/in-a-hurry/patterns) (Strategy, the most common pattern in LLD interviews)
 - [ ] **AI:** [LangChain Academy: Intro to LangGraph](https://academy.langchain.com/courses/intro-to-langgraph): plan, retrieve, draft, critic flow
 
 **Day 18**
 
 - [ ] **DSA:** [Partition Equal Subset Sum](https://leetcode.com/problems/partition-equal-subset-sum/) (knapsack)
 - [ ] **HLD:** [Distributed data stores](https://codefarm.in/roadmap/system-design) (Dynamo-style)
-- [ ] **LLD:** [Observer and Pub-Sub](https://codefarm.in/guides/lld/04-behavioral-patterns) (ref: [Observer](https://refactoring.guru/design-patterns/observer))
+- [ ] **LLD:** [Observer and Pub-Sub](https://codefarm.in/guides/lld/04-behavioral-patterns) (ref: [Observer](https://refactoring.guru/design-patterns/observer)); also Hello Interview's [patterns page](https://www.hellointerview.com/learn/low-level-design/in-a-hurry/patterns)
 - [ ] **AI:** [LangGraph persistence](https://langchain-ai.github.io/langgraph/concepts/persistence/): Postgres checkpointer; kill a run and resume it
 
 **Day 19**
@@ -271,14 +158,14 @@ Day 1 can be any weekday. The weeks are numbered by day, not by calendar date.
 
 - [ ] **DSA:** [Best Time to Buy and Sell Stock with Cooldown](https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/) (state-machine DP)
 - [ ] **HLD:** [Consistent hashing and Bloom filters](https://codefarm.in/roadmap/system-design)
-- [ ] **LLD:** [State and Mediator](https://codefarm.in/guides/lld/04-behavioral-patterns) (ref: [State](https://refactoring.guru/design-patterns/state), [Mediator](https://refactoring.guru/design-patterns/mediator))
+- [ ] **LLD:** [State and Mediator](https://codefarm.in/guides/lld/04-behavioral-patterns) (ref: [State](https://refactoring.guru/design-patterns/state), [Mediator](https://refactoring.guru/design-patterns/mediator)); also Hello Interview's [patterns page](https://www.hellointerview.com/learn/low-level-design/in-a-hurry/patterns) (state machine)
 - [ ] **AI:** [Writing tools for agents](https://www.anthropic.com/engineering/writing-tools-for-agents): schemas, idempotency, errors, permissions
 
 **Day 21 (review)**
 
 - [ ] **DSA:** redo the problem you failed this week
 - [ ] **HLD:** design a key-value store (Dynamo-style); reference: [System Design Primer](https://github.com/donnemartin/system-design-primer)
-- [ ] **LLD:** code a small order-status state machine ([State](https://refactoring.guru/design-patterns/state))
+- [ ] **LLD:** code a small order-status state machine ([State](https://refactoring.guru/design-patterns/state), [Hello Interview vending machine example](https://www.hellointerview.com/learn/low-level-design/in-a-hurry/patterns))
 - [ ] **AI:** end-to-end agent test; explain aloud single vs multi-agent and when not to use agents ([Building effective agents](https://www.anthropic.com/engineering/building-effective-agents))
 
 ### Week 4: heaps, intervals, greedy · HLD core algorithms and architecture patterns · LLD schema, API design, concurrency · integrations
@@ -315,21 +202,21 @@ Day 1 can be any weekday. The weeks are numbered by day, not by calendar date.
 
 - [ ] **DSA:** [Find Median from Data Stream](https://leetcode.com/problems/find-median-from-data-stream/) (two heaps, hard)
 - [ ] **HLD:** [Microservices architecture](https://codefarm.in/roadmap/system-design): decomposition, database per service
-- [ ] **LLD:** Concurrency: [threading docs](https://docs.python.org/3/library/threading.html), [asyncio docs](https://docs.python.org/3/library/asyncio.html); locks and race conditions
+- [ ] **LLD:** Concurrency: Hello Interview's [intro](https://www.hellointerview.com/learn/low-level-design/concurrency/intro) and [correctness](https://www.hellointerview.com/learn/low-level-design/concurrency/correctness); Python [threading](https://docs.python.org/3/library/threading.html) and [asyncio](https://docs.python.org/3/library/asyncio.html) docs
 - [ ] **AI:** [n8n courses](https://docs.n8n.io/courses/): webhook, HTTP call, Slack workflow
 
 **Day 27**
 
 - [ ] **DSA:** [Reverse Nodes in k-Group](https://leetcode.com/problems/reverse-nodes-in-k-group/) (hard linked list)
 - [ ] **HLD:** [Event-driven architecture](https://codefarm.in/roadmap/system-design): event sourcing, CQRS
-- [ ] **LLD:** [Problem: parking lot](https://codefarm.in/guides/lld/06-lld-interview-problems)
+- [ ] **LLD:** Problem: parking lot. Read Hello Interview's [delivery framework](https://www.hellointerview.com/learn/low-level-design/in-a-hurry/delivery) first, then its [parking lot breakdown](https://www.hellointerview.com/learn/low-level-design/problem-breakdowns/parking-lot); also Codefarm's [problem guide](https://codefarm.in/guides/lld/06-lld-interview-problems)
 - [ ] **AI:** [Tenacity docs](https://tenacity.readthedocs.io): retries, timeouts and a dead-letter queue around LLM calls
 
 **Day 28 (review and gate)**
 
 - [ ] **DSA:** redo the problem you failed this week
 - [ ] **HLD:** design a job scheduler or distributed task queue; reference: [System Design Primer](https://github.com/donnemartin/system-design-primer)
-- [ ] **LLD:** code the parking lot's core classes with one test ([problem guide](https://codefarm.in/guides/lld/06-lld-interview-problems))
+- [ ] **LLD:** code the parking lot's core classes with one test ([Hello Interview breakdown](https://www.hellointerview.com/learn/low-level-design/problem-breakdowns/parking-lot), [Codefarm problem guide](https://codefarm.in/guides/lld/06-lld-interview-problems))
 - [ ] **AI:** compare [Temporal](https://docs.temporal.io), [Prefect](https://docs.prefect.io) and [n8n](https://docs.n8n.io) aloud. **Gate:** the capstone runs end to end locally. Start applying now.
 
 ### Week 5: trees, tries, backtracking · HLD architecture patterns and vector search · LLD interview problems · evals
@@ -338,7 +225,7 @@ Day 1 can be any weekday. The weeks are numbered by day, not by calendar date.
 
 - [ ] **DSA:** [Lowest Common Ancestor of a Binary Tree](https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/)
 - [ ] **HLD:** [Serverless and FaaS](https://codefarm.in/roadmap/system-design)
-- [ ] **LLD:** [Problem: elevator system](https://codefarm.in/guides/lld/06-lld-interview-problems)
+- [ ] **LLD:** Problem: elevator system ([Hello Interview breakdown](https://www.hellointerview.com/learn/low-level-design/problem-breakdowns/elevator), [Codefarm problem guide](https://codefarm.in/guides/lld/06-lld-interview-problems))
 - [ ] **AI:** [Langfuse docs](https://langfuse.com/docs): golden set of 25 test cases for your agent
 
 **Day 30**
@@ -366,7 +253,7 @@ Day 1 can be any weekday. The weeks are numbered by day, not by calendar date.
 
 - [ ] **DSA:** [Combination Sum](https://leetcode.com/problems/combination-sum/) (backtracking)
 - [ ] **HLD:** [Embeddings and vector databases](https://codefarm.in/roadmap/system-design) (HNSW)
-- [ ] **LLD:** [Problem: movie ticket booking](https://codefarm.in/guides/lld/06-lld-interview-problems) (seat locking)
+- [ ] **LLD:** Problem: movie ticket booking with seat locking ([Hello Interview breakdown](https://www.hellointerview.com/learn/low-level-design/problem-breakdowns/bookmyshow), [scarcity](https://www.hellointerview.com/learn/low-level-design/concurrency/scarcity), [Codefarm problem guide](https://codefarm.in/guides/lld/06-lld-interview-problems))
 - [ ] **AI:** [GitHub Actions docs](https://docs.github.com/en/actions): eval regression gate
 
 **Day 34**
@@ -380,7 +267,7 @@ Day 1 can be any weekday. The weeks are numbered by day, not by calendar date.
 
 - [ ] **DSA:** redo the problem you failed this week
 - [ ] **HLD:** design enterprise RAG with citations ([RAG architecture](https://codefarm.in/roadmap/system-design))
-- [ ] **LLD:** redo hotel or movie booking in code, with locking ([problem guide](https://codefarm.in/guides/lld/06-lld-interview-problems))
+- [ ] **LLD:** redo hotel or movie booking in code, with locking ([Hello Interview movie booking](https://www.hellointerview.com/learn/low-level-design/problem-breakdowns/bookmyshow), [Codefarm problem guide](https://codefarm.in/guides/lld/06-lld-interview-problems))
 - [ ] **AI:** explain aloud how you would evaluate any agent in production
 
 ### Week 6: advanced patterns · HLD Gen AI and LLM systems · LLD interview problems · safety and extraction
@@ -389,7 +276,7 @@ Day 1 can be any weekday. The weeks are numbered by day, not by calendar date.
 
 - [ ] **DSA:** [Single Number III](https://leetcode.com/problems/single-number-iii/) (bit manipulation)
 - [ ] **HLD:** [LLM gateway and routing](https://codefarm.in/roadmap/system-design)
-- [ ] **LLD:** [Problem: logger framework](https://codefarm.in/guides/lld/06-lld-interview-problems)
+- [ ] **LLD:** Problem: logger framework ([Hello Interview logging service](https://www.hellointerview.com/learn/low-level-design/problem-breakdowns/logging-service), [Codefarm problem guide](https://codefarm.in/guides/lld/06-lld-interview-problems))
 - [ ] **AI:** [OWASP Top 10 for LLM apps](https://genai.owasp.org/llm-top-10/): poison a document and watch the injection work
 
 **Day 37**
@@ -410,14 +297,14 @@ Day 1 can be any weekday. The weeks are numbered by day, not by calendar date.
 
 - [ ] **DSA:** [Trapping Rain Water](https://leetcode.com/problems/trapping-rain-water/) (two pointers, hard)
 - [ ] **HLD:** [Streaming and latency optimization](https://codefarm.in/roadmap/system-design) (SSE, time to first token)
-- [ ] **LLD:** [Problem: rate limiter](https://codefarm.in/guides/lld/06-lld-interview-problems) (token bucket, sliding window)
+- [ ] **LLD:** Problem: rate limiter with token bucket and sliding window ([Hello Interview breakdown](https://www.hellointerview.com/learn/low-level-design/problem-breakdowns/rate-limiter), [Codefarm problem guide](https://codefarm.in/guides/lld/06-lld-interview-problems))
 - [ ] **AI:** [Pydantic docs](https://docs.pydantic.dev/latest/): extract entities from two quotes or policies into one schema
 
 **Day 40**
 
 - [ ] **DSA:** [Split Array Largest Sum](https://leetcode.com/problems/split-array-largest-sum/) (binary search, hard)
 - [ ] **HLD:** [Guardrails and output validation](https://codefarm.in/roadmap/system-design)
-- [ ] **LLD:** [Problem: pub-sub system](https://codefarm.in/guides/lld/06-lld-interview-problems)
+- [ ] **LLD:** Problem: pub-sub system ([Codefarm problem guide](https://codefarm.in/guides/lld/06-lld-interview-problems); Hello Interview's [coordination](https://www.hellointerview.com/learn/low-level-design/concurrency/coordination) for the producer-consumer side)
 - [ ] **AI:** quote comparison: diff two extractions and cite pages
 
 **Day 41**
@@ -431,7 +318,7 @@ Day 1 can be any weekday. The weeks are numbered by day, not by calendar date.
 
 - [ ] **DSA:** redo the problem you failed this week
 - [ ] **HLD:** design an agent platform with an LLM gateway and guardrails ([roadmap phase 6](https://codefarm.in/roadmap/system-design))
-- [ ] **LLD:** code LRU/LFU with a test and a thread-safe variant ([problem guide](https://codefarm.in/guides/lld/06-lld-interview-problems))
+- [ ] **LLD:** code LRU/LFU with a test and a thread-safe variant ([Codefarm problem guide](https://codefarm.in/guides/lld/06-lld-interview-problems), [Hello Interview correctness](https://www.hellointerview.com/learn/low-level-design/concurrency/correctness))
 - [ ] **AI:** measure extraction and comparison accuracy on your eval set
 
 ### Week 7: hard mixed problems · HLD scalability, security, compliance · LLD design for AI systems · production and UI
@@ -482,7 +369,7 @@ Day 1 can be any weekday. The weeks are numbered by day, not by calendar date.
 
 - [ ] **DSA:** redo the problem you failed this week, then one new Medium
 - [ ] **HLD:** mock design, 25 min: multi-tenant document-processing platform ([roadmap](https://codefarm.in/roadmap/system-design))
-- [ ] **LLD:** mock, 25 min: a problem you haven't done, such as a library or bike rental system ([problem guide](https://codefarm.in/guides/lld/06-lld-interview-problems))
+- [ ] **LLD:** mock, 25 min: a problem you haven't done, either [Amazon Locker](https://www.hellointerview.com/learn/low-level-design/problem-breakdowns/amazon-locker) or [Inventory Management](https://www.hellointerview.com/learn/low-level-design/problem-breakdowns/inventory-management); attempt it before reading the breakdown
 - [ ] **AI:** answer interview questions aloud and record yourself
 
 ### Week 8: timed practice · HLD real-world case studies · LLD timed redos · packaging
@@ -491,21 +378,21 @@ Day 1 can be any weekday. The weeks are numbered by day, not by calendar date.
 
 - [ ] **DSA:** [Sliding Window Maximum](https://leetcode.com/problems/sliding-window-maximum/) (monotonic deque)
 - [ ] **HLD:** [Timed case study: URL shortener](https://codefarm.in/roadmap/system-design)
-- [ ] **LLD:** [Timed redo: parking lot](https://codefarm.in/guides/lld/06-lld-interview-problems)
+- [ ] **LLD:** Timed redo: parking lot ([Hello Interview breakdown](https://www.hellointerview.com/learn/low-level-design/problem-breakdowns/parking-lot), [Codefarm problem guide](https://codefarm.in/guides/lld/06-lld-interview-problems))
 - [ ] **AI:** README with an architecture diagram and measured results (only numbers from your own evals)
 
 **Day 51**
 
 - [ ] **DSA:** [Decode Ways](https://leetcode.com/problems/decode-ways/)
 - [ ] **HLD:** [Timed case study: Twitter and news feed](https://codefarm.in/roadmap/system-design) (fan-out, celebrity problem)
-- [ ] **LLD:** [Timed redo: elevator](https://codefarm.in/guides/lld/06-lld-interview-problems)
+- [ ] **LLD:** Timed redo: elevator ([Hello Interview breakdown](https://www.hellointerview.com/learn/low-level-design/problem-breakdowns/elevator), [Codefarm problem guide](https://codefarm.in/guides/lld/06-lld-interview-problems))
 - [ ] **AI:** record a 3-minute demo
 
 **Day 52**
 
 - [ ] **DSA:** [Kth Largest Element in an Array](https://leetcode.com/problems/kth-largest-element-in-an-array/) (quickselect or heap)
 - [ ] **HLD:** [Timed case study: WhatsApp and chat](https://codefarm.in/roadmap/system-design) (WebSockets, delivery receipts)
-- [ ] **LLD:** [Timed redo: movie ticket booking](https://codefarm.in/guides/lld/06-lld-interview-problems)
+- [ ] **LLD:** Timed redo: movie ticket booking ([Hello Interview breakdown](https://www.hellointerview.com/learn/low-level-design/problem-breakdowns/bookmyshow), [Codefarm problem guide](https://codefarm.in/guides/lld/06-lld-interview-problems))
 - [ ] **AI:** map 6 stories to STAR (patch orchestrator, MCP platform, platform adoption, parameter-update feature, mentoring, FINRAA); reference: [Amazon Leadership Principles](https://www.amazon.jobs/en/principles)
 
 **Day 53**
@@ -519,7 +406,7 @@ Day 1 can be any weekday. The weeks are numbered by day, not by calendar date.
 
 - [ ] **DSA:** [Median of Two Sorted Arrays](https://leetcode.com/problems/median-of-two-sorted-arrays/) (hard)
 - [ ] **HLD:** [Timed case study: Uber and ride-hailing](https://codefarm.in/roadmap/system-design) (geohash, real-time matching)
-- [ ] **LLD:** [Timed redo: rate limiter](https://codefarm.in/guides/lld/06-lld-interview-problems)
+- [ ] **LLD:** Timed redo: rate limiter ([Hello Interview breakdown](https://www.hellointerview.com/learn/low-level-design/problem-breakdowns/rate-limiter), [Codefarm problem guide](https://codefarm.in/guides/lld/06-lld-interview-problems))
 - [ ] **AI:** mock Q&A on agents, evals and safety
 
 **Day 55**
@@ -533,14 +420,5 @@ Day 1 can be any weekday. The weeks are numbered by day, not by calendar date.
 
 - [ ] **DSA:** one Medium, 40 min
 - [ ] **HLD:** [Trade-off analysis and decision frameworks](https://codefarm.in/roadmap/system-design) (ADRs), then one random design, 25 min
-- [ ] **LLD:** one new problem, 25 min ([problem guide](https://codefarm.in/guides/lld/06-lld-interview-problems))
+- [ ] **LLD:** one new problem, 25 min: [Connect Four](https://www.hellointerview.com/learn/low-level-design/problem-breakdowns/connect-four) or [File System](https://www.hellointerview.com/learn/low-level-design/problem-breakdowns/file-system); attempt it before reading the breakdown
 - [ ] **AI:** one question aloud plus a final capstone check. **Gate:** deployed URL, README with measured results, 2 mock interviews done, 10+ targeted applications sent.
-
-### Notes on this plan
-
-- **Total load:** about 112 hours. If you miss a day, shift the schedule by a day instead of compressing two days into one.
-- **Sources:** HLD follows the [System Design roadmap](https://codefarm.in/roadmap/system-design) (9 phases, 58 skills) and LLD follows the [LLD roadmap](https://codefarm.in/roadmap/lld) (6 phases, 35 skills). The LLD roadmap is written for Java, so implement in Python. Both pages are overviews: judge the depth of the guides they link to after your first two sessions.
-- **Skimmed:** Paxos, 2PC and 3PC, Merkle trees, vector clocks, service mesh, DDoS and WAF. Read for 10 minutes and explain each in one sentence.
-- **Added beyond the roadmaps:** estimation drills, plus HLD designs for a notification system, key-value store, job scheduler, enterprise RAG, agent platform and multi-tenant document processing; LLD concurrency, dependency injection and testing, LLM client, agent tool registry and workflow engine.
-- **Not covered:** Dropbox and file sync, typeahead, payments, Kubernetes, deep ML theory, hands-on fine-tuning. Add them for a specific application only.
-- **If you must cut:** AI-startup roles care less about LLD problems and hard DSA. For those, move 25 minutes a day from LLD to AI. If you target Amazon or large product companies, keep LLD.
