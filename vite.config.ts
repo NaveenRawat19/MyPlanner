@@ -17,9 +17,9 @@ export default defineConfig({
         cleanupOutdatedCaches: true,
       },
       manifest: {
-        name: "56-Day Interview Prep Tracker",
+        name: "Prep Tracker",
         short_name: "Prep Tracker",
-        description: "Track a 56-day DSA, HLD, LLD and AI interview prep plan. Works offline.",
+        description: "Build a day-by-day study plan with AI and track it every day. Works offline.",
         display: "standalone",
         start_url: "./",
         scope: "./",

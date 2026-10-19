@@ -2,10 +2,13 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { cleanup, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import App from "./App";
+import { PLAN_KEY } from "./state/planStorage";
 import { CORRUPT_KEY, STORAGE_KEY } from "./state/storage";
+import { buildSamplePlanSource } from "./test/samplePlan";
 
 beforeEach(() => {
   localStorage.clear();
+  window.scrollTo = vi.fn() as unknown as typeof window.scrollTo;
   vi.useFakeTimers({ toFake: ["Date"] });
   vi.setSystemTime(new Date(2026, 9, 16, 9, 0));
 });
@@ -20,7 +23,12 @@ function addNote(track: string, text: string) {
   fireEvent.click(within(form).getByRole("button", { name: "Submit" }));
 }
 
+function seedPlan(source = buildSamplePlanSource()) {
+  localStorage.setItem(PLAN_KEY, JSON.stringify({ source, name: "sample.txt", importedAt: "2026-10-16T00:00:00.000Z" }));
+}
+
 function start() {
+  if (!localStorage.getItem(PLAN_KEY)) seedPlan();
   render(<App />);
   fireEvent.click(screen.getByRole("button", { name: "Start tracking" }));
 }
@@ -162,5 +170,101 @@ describe("App", () => {
     fireEvent.change(screen.getByLabelText("Import plan file"), { target: { files: [file] } });
     await waitFor(() => expect(screen.getByText(/Plan rejected\. Line 2: Day numbers/)).toBeTruthy());
     expect(screen.getByText(/8 weeks, 56 days, 224 tasks/)).toBeTruthy();
+  });
+
+  describe("first run questionnaire", () => {
+    const click = (name: string) => fireEvent.click(screen.getByRole("button", { name }));
+    const planText = `### Week 1: Only week
+
+**Day 1**
+
+- [ ] **Read:** chapter 1
+- [ ] **Write:** an essay
+
+**Day 2**
+
+- [ ] **Read:** chapter 2
+`;
+
+    it("ships without any plan and shows only the welcome page", () => {
+      render(<App />);
+      expect(screen.getByRole("heading", { name: "Welcome to Prep Tracker" })).toBeTruthy();
+      expect(screen.queryAllByRole("checkbox")).toHaveLength(0);
+      expect(screen.queryByRole("button", { name: "Today" })).toBeNull();
+      expect(localStorage.getItem(PLAN_KEY)).toBeNull();
+    });
+
+    it("walks through the pages, builds the prompt, imports a pasted plan and starts tracking", () => {
+      render(<App />);
+      click("Create my plan");
+      click("Next");
+      expect(screen.getByRole("alert").textContent).toMatch(/what you want to achieve/);
+
+      fireEvent.change(screen.getByLabelText("Field"), { target: { value: "upsc" } });
+      fireEvent.change(screen.getByLabelText("What do you want to achieve?"), { target: { value: "Clear Prelims 2027" } });
+      click("Next");
+      fireEvent.change(screen.getByLabelText("Plan length"), { target: { value: "12" } });
+      fireEvent.change(screen.getByLabelText("Hours per day"), { target: { value: "6" } });
+      click("Next");
+      click("Next"); // default UPSC subjects are preselected
+      fireEvent.change(screen.getByLabelText(/Links, books, courses/), { target: { value: "Laxmikanth, Indian Polity" } });
+      click("Create my prompt");
+
+      const prompt = (screen.getByLabelText("Generated prompt") as HTMLTextAreaElement).value;
+      expect(prompt).toContain("Field: UPSC Civil Services");
+      expect(prompt).toContain("Goal: Clear Prelims 2027");
+      expect(prompt).toContain("84 days (12 weeks)");
+      expect(prompt).toContain("6 hours per day (360 minutes)");
+      expect(prompt).toContain("Laxmikanth, Indian Polity");
+      click("Next: import my plan");
+
+      fireEvent.change(screen.getByLabelText("Pasted plan text"), { target: { value: "no plan here" } });
+      click("Import pasted plan");
+      expect(screen.getByRole("alert").textContent).toMatch(/not a valid plan/);
+
+      fireEvent.change(screen.getByLabelText("Pasted plan text"), { target: { value: "```\n" + planText + "```" } });
+      click("Import pasted plan");
+      expect(screen.getByText(/Your 2-day plan is ready/)).toBeTruthy();
+      click("Start tracking");
+      expect(screen.getByRole("heading", { name: "Day 1" })).toBeTruthy();
+      expect(screen.getAllByRole("checkbox")).toHaveLength(2);
+      expect(JSON.parse(localStorage.getItem(PLAN_KEY)!).name).toBe("Pasted plan");
+    });
+
+    it("Back returns to the previous page and keeps the answers", () => {
+      render(<App />);
+      click("Create my plan");
+      fireEvent.change(screen.getByLabelText("What do you want to achieve?"), { target: { value: "My goal" } });
+      click("Next");
+      click("Back");
+      expect((screen.getByLabelText("What do you want to achieve?") as HTMLTextAreaElement).value).toBe("My goal");
+    });
+
+    it("lets people who already have a plan file skip the questions", async () => {
+      render(<App />);
+      click("I already have a plan file");
+      fireEvent.change(screen.getByLabelText("Plan file"), { target: { files: [new File([planText], "mine.txt", { type: "text/plain" })] } });
+      await waitFor(() => expect(screen.getByText(/Your 2-day plan is ready/)).toBeTruthy());
+      expect(JSON.parse(localStorage.getItem(PLAN_KEY)!).name).toBe("mine.txt");
+    });
+
+    it("keeps existing progress without a banner when no plan exists yet", () => {
+      localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify({ schemaVersion: 2, startDate: "2026-10-16", checked: { "d1-dsa": true }, notes: {}, lastBackup: null }),
+      );
+      render(<App />);
+      expect(screen.getByRole("heading", { name: "Welcome to Prep Tracker" })).toBeTruthy();
+      expect(screen.queryByRole("alert")).toBeNull();
+    });
+
+    it("can be reopened from Settings to replace the plan, and cancelled", () => {
+      start();
+      click("Settings");
+      click("Create a new plan (questionnaire)");
+      expect(screen.getByRole("heading", { name: "Welcome to Prep Tracker" })).toBeTruthy();
+      click("Cancel");
+      expect(screen.getByRole("heading", { name: "Settings" })).toBeTruthy();
+    });
   });
 });

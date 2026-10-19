@@ -1,6 +1,7 @@
-# 56-Day Interview Prep Tracker
+# Prep Tracker
 
-An installable, offline-first PWA for tracking a 56-day DSA / HLD / LLD / AI interview prep plan.
+An installable, offline-first PWA for building a day-by-day study plan (tech interviews, UPSC, or any exam or skill) and tracking it every day.
+The app ships **without any plan**: on first launch a questionnaire writes a prompt for ChatGPT or Claude, and you import the plan it gives you.
 No backend, no accounts, no analytics: everything lives in your browser's `localStorage`.
 
 Stack: Vite, React, TypeScript (strict), plain CSS, `vite-plugin-pwa`, Vitest.
@@ -11,22 +12,27 @@ Requires Node.js 20 or newer.
 
 ```powershell
 npm install
-npm run dev        # dev server (parses the plan first)
+npm run dev        # dev server
 npm test           # unit and UI tests
-npm run build      # parse, type-check, build to dist/
+npm run build      # type-check, build to dist/
 npm run preview    # serve the production build (service worker active)
 ```
 
 Other scripts:
 
-- `npm run parse` regenerates `src/data/plan.json` from `data/plan-source.md`. It fails unless there are exactly 56 days with 4 tasks each. It runs automatically before `dev` and `build`.
 - `npm run icons` regenerates the placeholder PNG icons in `public/icons/` (no external assets; the output is committed).
 
-To change the built-in plan, edit `data/plan-source.md` (everything before the "N-week daily plan" heading is ignored). You can also swap the plan at runtime without rebuilding: see below.
+## First launch: the questionnaire
+
+1. **Welcome**, then six short pages: your field and goal, plan length and daily time, subjects (tracks), resources and study style, **your prompt** (copy it, with links to ChatGPT and Claude), and **import** (choose the `.txt` file or paste the AI's reply).
+2. Pick the start date. The checklist, Plan and Progress tabs are built from the imported plan.
+3. Already have a plan file? Choose "I already have a plan file" on the welcome page to skip the questions.
+
+The questionnaire can be reopened any time from **Settings > Plan > Create a new plan (questionnaire)**. The prompt text lives in `src/lib/planPrompt.ts` and the pages in `src/components/PlanWizard.tsx`.
 
 ## Import your own plan
 
-**Settings > Plan > Import plan (.txt)** replaces the plan with a text file in this format (the same Markdown subset as `data/plan-source.md`). **Download current plan as .txt** gives you a ready-made file to edit.
+**Settings > Plan > Import plan (.txt)** (or the last questionnaire page) replaces the plan with a text file in this format. **Download current plan as .txt** gives you a ready-made file to edit.
 
 ```text
 ### Week 1: Arrays and hashing
@@ -50,9 +56,11 @@ Rules:
 - Lines that match none of these, and anything before an optional `## N-week daily plan` heading, are ignored.
 - Errors are reported with the offending line number and nothing is changed.
 
-**Generate a plan with AI:** Settings > Plan > "Generate a plan with AI" has a copy-ready prompt (source: `src/lib/planPrompt.ts`) that works for tech interviews, UPSC or any other exam or skill, with suggested tracks and sources for the first two. Paste it into ChatGPT, Claude or Gemini, fill in the bracketed field, duration, daily time and tracks, save the reply as a `.txt` file and import it. Track names are free text (up to 24 characters, e.g. `GS2`, `Current Affairs`); tracks outside DSA/HLD/LLD/AI get an automatic badge colour.
+**The questionnaire prompt:** it asks for your field (tech interviews, UPSC or any other exam or skill), goal, level, weak areas, plan length, hours per day, tracks (subjects), links, books or courses to use, study style and extra instructions, then writes a ready-to-paste prompt with the exact format rules. If the AI's reply stops early, send "continue" and join the parts into one file. Your answers are remembered in `localStorage`. Track names are free text (up to 24 characters, e.g. `GS2`, `Current Affairs`); tracks outside DSA/HLD/LLD/AI get an automatic badge colour.
 
-On import the app builds the day-wise checklist, Plan and Progress tabs (overall, by week, by track) from the file. Ticks and notes are kept for tasks whose id (`d<day>-<track>`), track and text are unchanged; the confirmation dialog tells you what would be removed. The imported plan is stored in `localStorage`; **Use built-in plan** switches back.
+On import the app builds the day-wise checklist, Plan and Progress tabs (overall, by week, by track) from the file. When you replace an existing plan, ticks and notes are kept for tasks whose id (`d<day>-<track>`), track and text are unchanged; the confirmation dialog tells you what would be removed. The plan is stored in `localStorage`.
+
+`data/plan-source.md` is no longer used by the app (nothing is bundled). It is the author's former built-in plan, kept only as a reference file you can delete.
 
 ## Notes
 

@@ -89,6 +89,11 @@ describe("persistence", () => {
 describe("validateState", () => {
   const ok = defaultState();
   it("accepts a valid state", () => expect(validateState(ok, ids).ok).toBe(true));
+  it("skips task id checks while no plan is loaded", () => {
+    const s = { ...ok, checked: { "d9-x": true }, notes: { "d9-x": [{ text: "n", at: "" }] } };
+    expect(validateState(s, null).ok).toBe(true);
+    expect(validateState(s, ids).ok).toBe(false);
+  });
   it("migrates v1 day notes onto the first task of that day", () => {
     const v1 = { schemaVersion: 1, startDate: "2026-10-16", checked: { "d1-hld": true }, notes: { "1": "old note", "2": " " }, lastBackup: null };
     const r = validateState(v1, ids);

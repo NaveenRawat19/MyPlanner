@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { PlanWizard } from "./components/PlanWizard";
 import { StartDatePrompt } from "./components/StartDatePrompt";
 import { TabBar, type Tab } from "./components/TabBar";
 import { needsBackupReminder } from "./lib/backup";
@@ -10,12 +11,12 @@ import { TodayScreen } from "./screens/TodayScreen";
 import { useAppState, useToday } from "./state/useAppState";
 
 export default function App() {
-  const { state, dispatch, plan, customPlan, applyPlan, restoreBundledPlan, recovered, dismissRecovered, saveFailed } =
-    useAppState();
+  const { state, dispatch, plan, planInfo, applyPlan, recovered, dismissRecovered, saveFailed } = useAppState();
   const today = useToday();
   const [tab, setTab] = useState<Tab>("today");
   const [viewDay, setViewDay] = useState<number | null>(null);
   const [reminderHidden, setReminderHidden] = useState(false);
+  const [wizardOpen, setWizardOpen] = useState(false);
 
   const banners = (
     <div className="banners">
@@ -38,11 +39,31 @@ export default function App() {
     </div>
   );
 
+  // The app ships without a plan: first run (and "create a new plan") goes through the questionnaire.
+  if (!plan || wizardOpen) {
+    return (
+      <>
+        {banners}
+        <PlanWizard
+          plan={plan}
+          state={state}
+          onApplyPlan={applyPlan}
+          onDone={() => {
+            setWizardOpen(false);
+            setViewDay(null);
+            setTab("today");
+          }}
+          onCancel={plan ? () => setWizardOpen(false) : undefined}
+        />
+      </>
+    );
+  }
+
   if (!state.startDate) {
     return (
       <>
         {banners}
-        <StartDatePrompt defaultDate={today} onSave={(date) => dispatch({ type: "setStartDate", date })} />
+        <StartDatePrompt defaultDate={today} days={plan.total} onSave={(date) => dispatch({ type: "setStartDate", date })} />
       </>
     );
   }
@@ -81,12 +102,12 @@ export default function App() {
         <SettingsScreen
           state={state}
           plan={plan}
-          customPlan={customPlan}
+          planInfo={planInfo}
           startDate={startDate}
           today={today}
           dispatch={dispatch}
           onApplyPlan={applyPlan}
-          onRestoreBundledPlan={restoreBundledPlan}
+          onCreatePlan={() => setWizardOpen(true)}
         />
       )}
       <TabBar

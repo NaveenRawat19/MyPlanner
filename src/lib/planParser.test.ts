@@ -1,9 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { bundledPlan, makePlan } from "../data/plan";
+import { makePlan } from "../data/plan";
 import { reconcileState } from "../state/planStorage";
 import { defaultState } from "../state/storage";
+import { buildSamplePlanSource } from "../test/samplePlan";
 import { parsePlan, planStats, serializePlan } from "./planParser";
-import { PLAN_EXAMPLE_TECH, PLAN_EXAMPLE_UPSC, PLAN_PROMPT } from "./planPrompt";
 
 const small = `# My plan
 
@@ -68,8 +68,9 @@ describe("parsePlan (flexible import)", () => {
 });
 
 describe("serializePlan", () => {
-  it("round-trips the bundled plan", () => {
-    expect(parsePlan(serializePlan(bundledPlan.weeks))).toEqual(bundledPlan.weeks);
+  it("round-trips a 56-day plan", () => {
+    const weeks = parsePlan(buildSamplePlanSource());
+    expect(parsePlan(serializePlan(weeks))).toEqual(weeks);
   });
   it("round-trips a small plan", () => {
     const weeks = parsePlan(small);
@@ -77,26 +78,11 @@ describe("serializePlan", () => {
   });
 });
 
-describe("AI prompt", () => {
-  it("contains examples that the importer accepts", () => {
-    const tech = parsePlan(PLAN_EXAMPLE_TECH);
-    expect(planStats(tech)).toEqual({ weeks: 1, days: 2, tasks: 8 });
-    expect(makePlan(tech).tracks).toEqual(["DSA", "HLD", "LLD", "AI"]);
-    const upsc = parsePlan(PLAN_EXAMPLE_UPSC);
-    expect(planStats(upsc)).toEqual({ weeks: 1, days: 2, tasks: 10 });
-    expect(makePlan(upsc).tracks).toEqual(["GS1", "GS2", "GS3", "Current Affairs", "Answer Writing"]);
-  });
-
-  it("embeds both examples", () => {
-    expect(PLAN_PROMPT).toContain(PLAN_EXAMPLE_TECH);
-    expect(PLAN_PROMPT).toContain(PLAN_EXAMPLE_UPSC);
-  });
-});
-
-describe("bundled plan", () => {
+describe("sample plan", () => {
   it("is 56 days with 4 tasks each", () => {
-    expect(planStats(bundledPlan.weeks)).toEqual({ weeks: 8, days: 56, tasks: 224 });
-    expect(bundledPlan.tracks).toEqual(["DSA", "HLD", "LLD", "AI"]);
+    const plan = makePlan(parsePlan(buildSamplePlanSource()));
+    expect(planStats(plan.weeks)).toEqual({ weeks: 8, days: 56, tasks: 224 });
+    expect(plan.tracks).toEqual(["DSA", "HLD", "LLD", "AI"]);
   });
 });
 
@@ -120,8 +106,14 @@ describe("reconcileState", () => {
   });
 
   it("drops everything that no longer exists", () => {
-    const r = reconcileState(state, oldPlan, bundledPlan);
+    const r = reconcileState(state, oldPlan, makePlan(parsePlan(buildSamplePlanSource())));
     expect(r.state.checked).toEqual({});
     expect(r.state.notes).toEqual({});
+  });
+
+  it("drops everything when there was no plan yet", () => {
+    const r = reconcileState(state, null, oldPlan);
+    expect(r.state.checked).toEqual({});
+    expect(r.droppedChecked).toBe(3);
   });
 });

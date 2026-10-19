@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useReducer, useState } from "react";
 import type { PlanData } from "../data/plan";
 import { toISODate } from "../lib/dates";
-import { clearPlan, loadPlan, reconcileState, savePlan } from "./planStorage";
+import { loadPlan, reconcileState, savePlan } from "./planStorage";
 import { reducer } from "./reducer";
 import { loadState, memoryStorage, saveState, type KV } from "./storage";
 
@@ -19,7 +19,7 @@ function getStorage(): KV {
 export function useAppState() {
   const [storage] = useState(getStorage);
   const [initialPlan] = useState(() => loadPlan(storage));
-  const [init] = useState(() => loadState(storage, initialPlan.plan.validIds));
+  const [init] = useState(() => loadState(storage, initialPlan.plan?.validIds ?? null));
   const [state, dispatch] = useReducer(reducer, init.state);
   const [loaded, setLoaded] = useState(initialPlan);
   const [recovered, setRecovered] = useState(init.recovered);
@@ -39,17 +39,7 @@ export function useAppState() {
       const info = { name, importedAt: new Date().toISOString() };
       if (!savePlan(storage, source, info)) return false;
       dispatch({ type: "replace", state: reconcileState(state, loaded.plan, plan).state });
-      setLoaded({ plan, custom: info });
-      return true;
-    },
-    [storage, state, loaded.plan],
-  );
-
-  const restoreBundledPlan = useCallback(
-    (plan: PlanData): boolean => {
-      if (!clearPlan(storage)) return false;
-      dispatch({ type: "replace", state: reconcileState(state, loaded.plan, plan).state });
-      setLoaded({ plan, custom: null });
+      setLoaded({ plan, info });
       return true;
     },
     [storage, state, loaded.plan],
@@ -59,9 +49,8 @@ export function useAppState() {
     state,
     dispatch,
     plan: loaded.plan,
-    customPlan: loaded.custom,
+    planInfo: loaded.info,
     applyPlan,
-    restoreBundledPlan,
     recovered,
     dismissRecovered: () => setRecovered(false),
     saveFailed,

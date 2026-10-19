@@ -4,11 +4,8 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "parse": "tsx scripts/parse-plan.ts",
     "icons": "tsx scripts/generate-icons.ts",
-    "predev": "npm run parse",
     "dev": "vite",
-    "prebuild": "npm run parse",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
     "test": "vitest run"

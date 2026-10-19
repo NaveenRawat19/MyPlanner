@@ -50,7 +50,8 @@ export function migrate(raw: unknown): unknown {
   return s;
 }
 
-export function validateState(raw: unknown, validIds: ReadonlySet<string>): Validation {
+/** `validIds` is null while no plan is loaded; task ids are then not checked (they are reconciled when a plan is imported). */
+export function validateState(raw: unknown, validIds: ReadonlySet<string> | null): Validation {
   const s = migrate(raw);
   if (!isObj(s)) return { ok: false, error: "Not an object" };
   if (typeof s.schemaVersion !== "number") return { ok: false, error: "Missing schemaVersion" };
@@ -63,13 +64,13 @@ export function validateState(raw: unknown, validIds: ReadonlySet<string>): Vali
   if (!isObj(s.checked)) return { ok: false, error: "Invalid checked" };
   const checked: Record<string, true> = {};
   for (const [id, v] of Object.entries(s.checked)) {
-    if (v !== true || !validIds.has(id)) return { ok: false, error: `Unknown task "${id}"` };
+    if (v !== true || (validIds && !validIds.has(id))) return { ok: false, error: `Unknown task "${id}"` };
     checked[id] = true;
   }
   if (!isObj(s.notes)) return { ok: false, error: "Invalid notes" };
   const notes: Record<string, Note[]> = {};
   for (const [id, list] of Object.entries(s.notes)) {
-    if (!validIds.has(id)) return { ok: false, error: `Note for unknown task "${id}"` };
+    if (validIds && !validIds.has(id)) return { ok: false, error: `Note for unknown task "${id}"` };
     if (!Array.isArray(list) || list.length > MAX_NOTES_PER_TASK) return { ok: false, error: `Invalid notes for "${id}"` };
     const clean: Note[] = [];
     for (const n of list) {
@@ -98,7 +99,7 @@ export function validateState(raw: unknown, validIds: ReadonlySet<string>): Vali
 export type LoadResult = { state: AppState; existed: boolean; recovered: boolean };
 
 /** Never throws and never discards unreadable data: a corrupt value is copied to CORRUPT_KEY first. */
-export function loadState(storage: KV, validIds: ReadonlySet<string>): LoadResult {
+export function loadState(storage: KV, validIds: ReadonlySet<string> | null): LoadResult {
   let text: string | null = null;
   try {
     text = storage.getItem(STORAGE_KEY);

@@ -187,7 +187,8 @@ ul {
   font-size: 0.9rem;
 }
 .field input,
-.field select {
+.field select,
+.field textarea {
   min-height: 48px;
   padding: 8px 12px;
   border-radius: 12px;
@@ -314,6 +315,120 @@ ul {
   font-size: 0.9rem;
   max-width: 100%;
   overflow-wrap: anywhere;
+}
+
+.field textarea {
+  resize: vertical;
+  line-height: 1.4;
+}
+details > summary {
+  cursor: pointer;
+  font-weight: 600;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+}
+.wizard {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-bottom: 32px;
+}
+.wizard-page {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.wizard-page .btn {
+  width: 100%;
+}
+.wizard-page .check {
+  align-self: flex-start;
+}
+.wizard-nav {
+  display: flex;
+  gap: 10px;
+  position: sticky;
+  bottom: 0;
+  padding: 12px 0;
+  background: var(--bg);
+}
+.wizard-nav .btn {
+  flex: 1;
+}
+.builder {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding-top: 6px;
+}
+.qgroup {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+  padding: 12px;
+  min-width: 0;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+.qgroup legend {
+  padding: 0 6px;
+  font-weight: 700;
+}
+.qhint {
+  margin: 0;
+  font-size: 0.85rem;
+}
+.qrow {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: 10px;
+}
+.checks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.check {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 4px 12px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+.check input {
+  width: 20px;
+  height: 20px;
+  accent-color: var(--accent);
+}
+.qerrors {
+  list-style: disc;
+  margin: 0;
+  padding: 10px 12px 10px 28px;
+  border-radius: 10px;
+  background: var(--tint-missed);
+  color: var(--danger);
+}
+.qresult {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.qresult h3 {
+  margin: 0;
+}
+.qsteps {
+  margin: 0;
+  padding-left: 22px;
+}
+.qsteps a {
+  color: var(--accent);
 }
 
 .task-notes {

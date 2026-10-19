@@ -1,4 +1,3 @@
-import planJson from "./plan.json";
 import type { Day, Week } from "../types";
 
 export type PlanData = {
@@ -21,9 +20,6 @@ export function makePlan(weeks: Week[]): PlanData {
     tracks: [...new Set(tasks.map((t) => t.track))],
   };
 }
-
-/** The plan shipped with the app (built from data/plan-source.md). */
-export const bundledPlan: PlanData = makePlan(planJson as Week[]);
 
 export const weekOfDay = (plan: PlanData, day: number): Week | undefined =>
   plan.weeks.find((w) => w.days.some((d) => d.day === day));

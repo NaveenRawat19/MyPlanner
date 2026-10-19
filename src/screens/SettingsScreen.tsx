@@ -1,22 +1,22 @@
 import { useRef, useState } from "react";
-import { bundledPlan, makePlan, type PlanData } from "../data/plan";
+import { makePlan, type PlanData } from "../data/plan";
 import { buildExport, needsBackupReminder, parseImport } from "../lib/backup";
 import { daysBetween, formatDate, isISODate } from "../lib/dates";
 import { MAX_PLAN_BYTES, parsePlan, planStats, serializePlan } from "../lib/planParser";
-import { PLAN_PROMPT } from "../lib/planPrompt";
+
 import type { Action } from "../state/reducer";
-import { reconcileState, type CustomPlanInfo } from "../state/planStorage";
+import { reconcileState, type PlanInfo } from "../state/planStorage";
 import type { AppState } from "../types";
 
 type Props = {
   state: AppState;
   plan: PlanData;
-  customPlan: CustomPlanInfo | null;
+  planInfo: PlanInfo | null;
   startDate: string;
   today: string;
   dispatch: (a: Action) => void;
   onApplyPlan: (plan: PlanData, source: string, name: string) => boolean;
-  onRestoreBundledPlan: (plan: PlanData) => boolean;
+  onCreatePlan: () => void;
 };
 
 type Message = { kind: "ok" | "error"; text: string } | null;
@@ -44,7 +44,7 @@ const PLAN_EXAMPLE = `### Week 1: Arrays and hashing
 - [ ] **DSA:** Redo yesterday's problem
 - [ ] **HLD:** Redo one design`;
 
-export function SettingsScreen({ state, plan, customPlan, startDate, today, dispatch, onApplyPlan, onRestoreBundledPlan }: Props) {
+export function SettingsScreen({ state, plan, planInfo, startDate, today, dispatch, onApplyPlan, onCreatePlan }: Props) {
   const [message, setMessage] = useState<Message>(null);
   const [planMessage, setPlanMessage] = useState<Message>(null);
   const fileRef = useRef<HTMLInputElement>(null);
@@ -108,25 +108,6 @@ export function SettingsScreen({ state, plan, customPlan, startDate, today, disp
     setPlanMessage({ kind: "ok", text: "Plan file created. Edit it and import it back to change the plan." });
   };
 
-  const copyPrompt = async () => {
-    try {
-      await navigator.clipboard.writeText(PLAN_PROMPT);
-      setPlanMessage({ kind: "ok", text: "Prompt copied." });
-    } catch {
-      setPlanMessage({ kind: "error", text: "Could not copy automatically. Select the prompt text and copy it manually." });
-    }
-  };
-
-  const doRestorePlan = () => {
-    if (window.confirm("Switch back to the built-in plan? Progress and notes for tasks that differ are removed. This cannot be undone.")) {
-      setPlanMessage(
-        onRestoreBundledPlan(bundledPlan)
-          ? { kind: "ok", text: "Built-in plan restored." }
-          : { kind: "error", text: "The built-in plan could not be restored (storage unavailable)." },
-      );
-    }
-  };
-
   const doReset = () => {
     if (window.confirm("Reset ALL progress and notes? Your start date and plan are kept. This cannot be undone.")) {
       dispatch({ type: "reset" });
@@ -156,13 +137,16 @@ export function SettingsScreen({ state, plan, customPlan, startDate, today, disp
       <section className="card stack">
         <h2>Plan</h2>
         <p>
-          Current plan: <strong>{customPlan ? customPlan.name : "Built-in plan"}</strong>
+          Current plan: <strong>{planInfo?.name ?? "Your plan"}</strong>
           <br />
           <span className="muted">
             {stats.weeks} weeks, {stats.days} days, {stats.tasks} tasks
           </span>
         </p>
-        <label className="btn primary" tabIndex={0} onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && (e.preventDefault(), planFileRef.current?.click())}>
+        <button type="button" className="btn primary" onClick={onCreatePlan}>
+          Create a new plan (questionnaire)
+        </button>
+        <label className="btn" tabIndex={0} onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && (e.preventDefault(), planFileRef.current?.click())}>
           Import plan (.txt)
           <input
             ref={planFileRef}
@@ -177,11 +161,6 @@ export function SettingsScreen({ state, plan, customPlan, startDate, today, disp
         <button type="button" className="btn" onClick={doExportPlan}>
           Download current plan as .txt
         </button>
-        {customPlan && (
-          <button type="button" className="btn" onClick={doRestorePlan}>
-            Use built-in plan
-          </button>
-        )}
         <p className="status-line" role="status" data-kind={planMessage?.kind}>
           {planMessage?.text}
         </p>
@@ -193,17 +172,6 @@ export function SettingsScreen({ state, plan, customPlan, startDate, today, disp
             brackets marks a review day.
           </p>
           <pre className="format-example">{PLAN_EXAMPLE}</pre>
-        </details>
-        <details>
-          <summary>Generate a plan with AI (tech, UPSC or any field)</summary>
-          <p className="muted">
-            Copy this prompt into ChatGPT, Claude or Gemini, fill in the bracketed parts (field, duration, daily time, tracks), save the
-            reply as a .txt file and import it above. It includes suggested tracks and sources for tech interviews and UPSC.
-          </p>
-          <textarea className="prompt-text" readOnly rows={10} value={PLAN_PROMPT} aria-label="AI prompt for generating a plan file" />
-          <button type="button" className="btn" onClick={() => void copyPrompt()}>
-            Copy prompt
-          </button>
         </details>
       </section>
 
