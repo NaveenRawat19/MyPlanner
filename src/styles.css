@@ -272,6 +272,7 @@ ul {
   color: var(--muted);
 }
 .badge {
+  background: #4b5563;
   color: #fff;
   font-size: 0.75rem;
   font-weight: 700;
@@ -313,6 +314,67 @@ ul {
   font-size: 0.9rem;
   max-width: 100%;
   overflow-wrap: anywhere;
+}
+
+.task-notes {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0 14px 14px;
+}
+.note-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.note {
+  padding: 8px 12px;
+  border-left: 3px solid var(--accent);
+  background: var(--bg);
+  border-radius: 8px;
+}
+.note-text {
+  margin: 0;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+.note-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 0.8rem;
+}
+.note-form {
+  display: flex;
+  gap: 8px;
+}
+.note-form input {
+  flex: 1;
+  min-width: 0;
+  min-height: 44px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+}
+.prompt-text {
+  width: 100%;
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: inherit;
+  resize: vertical;
+}
+.format-example,
+.prompt-text {
+  overflow-x: auto;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: var(--bg);
+  font-size: 0.8rem;
+  white-space: pre;
 }
 
 /* Plan */

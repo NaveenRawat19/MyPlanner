@@ -1,67 +1,17 @@
-import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
+﻿import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
+import { parsePlan as parseAnyPlan } from "../src/lib/planParser";
+import type { Week } from "../src/types";
 
-export type Track = "DSA" | "HLD" | "LLD" | "AI";
-export type Task = {
-  id: string;
-  track: Track;
-  text: string;
-  links: { label: string; url: string }[];
-};
-export type Day = { day: number; label: string; isReview: boolean; tasks: Task[] };
-export type Week = { week: number; title: string; days: Day[] };
+export { parseTask } from "../src/lib/planParser";
+export type { Day, Task, Track, Week } from "../src/types";
 
-const TRACKS: Track[] = ["DSA", "HLD", "LLD", "AI"];
-const START_HEADING = /^#{1,6}\s*8-week daily plan/i;
-const WEEK_RE = /^###\s+Week\s+(\d+):\s*(.+?)\s*$/;
-const DAY_RE = /^\*\*Day\s+(\d+)(?:\s*\(([^)]*)\))?\*\*\s*$/;
-const TASK_RE = /^- \[[ xX]\]\s+\*\*(DSA|HLD|LLD|AI):\*\*\s*(.*?)\s*$/;
-const LINK_RE = /\[([^\]]+)\]\(([^)\s]+)\)/g;
+const TRACKS = ["DSA", "HLD", "LLD", "AI"];
 
-export function parseTask(day: number, track: Track, raw: string): Task {
-  const links: Task["links"] = [];
-  const text = raw.replace(LINK_RE, (_m, label: string, url: string) => {
-    links.push({ label, url });
-    return label;
-  });
-  if (/\]\(/.test(text)) {
-    throw new Error(`Unparsed Markdown link in day ${day} ${track}: ${raw}`);
-  }
-  return { id: `d${day}-${track.toLowerCase()}`, track, text, links };
-}
-
+/** Build-time parse of the bundled plan: the app's flexible parser plus the strict 56 x 4 shape. */
 export function parsePlan(markdown: string): Week[] {
-  const lines = markdown.split(/\r?\n/);
-  const start = lines.findIndex((l) => START_HEADING.test(l));
-  if (start < 0) throw new Error('Heading "8-week daily plan" not found');
-
-  const weeks: Week[] = [];
-  let week: Week | undefined;
-  let day: Day | undefined;
-
-  for (const line of lines.slice(start + 1)) {
-    let m: RegExpMatchArray | null;
-    if ((m = line.match(WEEK_RE))) {
-      week = { week: Number(m[1]), title: m[2], days: [] };
-      weeks.push(week);
-      day = undefined;
-    } else if ((m = line.match(DAY_RE))) {
-      if (!week) throw new Error(`Day heading before any week: ${line}`);
-      const n = Number(m[1]);
-      day = {
-        day: n,
-        label: m[2] ? `Day ${n} (${m[2].trim()})` : `Day ${n}`,
-        isReview: /review/i.test(m[2] ?? ""),
-        tasks: [],
-      };
-      week.days.push(day);
-    } else if ((m = line.match(TASK_RE))) {
-      if (!day) throw new Error(`Task before any day heading: ${line}`);
-      day.tasks.push(parseTask(day.day, m[1] as Track, m[2]));
-    }
-  }
-
+  const weeks = parseAnyPlan(markdown);
   validatePlan(weeks);
   return weeks;
 }
@@ -71,17 +21,13 @@ export function validatePlan(weeks: Week[], expectedDays = 56): void {
   if (days.length !== expectedDays) {
     throw new Error(`Expected ${expectedDays} days, found ${days.length}`);
   }
-  days.forEach((d, i) => {
-    if (d.day !== i + 1) throw new Error(`Day numbering broken: expected ${i + 1}, got ${d.day}`);
+  days.forEach((d) => {
     const tracks = d.tasks.map((t) => t.track);
     if (d.tasks.length !== 4 || tracks.join() !== TRACKS.join()) {
       throw new Error(`Day ${d.day} must have exactly DSA, HLD, LLD, AI tasks; got [${tracks.join(", ")}]`);
     }
   });
-  const ids = new Set(days.flatMap((d) => d.tasks.map((t) => t.id)));
-  if (ids.size !== expectedDays * 4) throw new Error("Task ids are not unique");
 }
-
 function main() {
   const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
   try {

@@ -44,7 +44,7 @@ describe("parsePlan", () => {
   it("fails loudly when the plan is not 56 days", () => lenient(fixture));
 
   it("fails when the heading is missing", () => {
-    expect(() => parsePlan("# nothing")).toThrow(/not found/);
+    expect(() => parsePlan("# nothing")).toThrow(/No weeks found/);
   });
 
   it("parses weeks, days, tasks, links (via a 56-day fixture)", () => {

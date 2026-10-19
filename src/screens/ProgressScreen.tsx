@@ -1,13 +1,15 @@
 import { ProgressBar } from "../components/ProgressBar";
-import { plan } from "../data/plan";
+import type { PlanData } from "../data/plan";
 import { currentStreak, daysBehind, overallProgress, trackProgress, weekProgress } from "../lib/progress";
-import { TRACKS, type AppState } from "../types";
+import type { AppState } from "../types";
 
-export function ProgressScreen({ state, raw, currentDay }: { state: AppState; raw: number; currentDay: number }) {
-  const overall = overallProgress(plan, state.checked);
-  const tracks = trackProgress(plan, state.checked);
-  const streak = currentStreak(plan, state.checked, currentDay);
-  const behind = daysBehind(plan, state.checked, raw);
+type Props = { plan: PlanData; state: AppState; raw: number; currentDay: number };
+
+export function ProgressScreen({ plan, state, raw, currentDay }: Props) {
+  const overall = overallProgress(plan.weeks, state.checked);
+  const tracks = trackProgress(plan.weeks, state.checked);
+  const streak = currentStreak(plan.weeks, state.checked, currentDay);
+  const behind = daysBehind(plan.weeks, state.checked, raw);
 
   return (
     <main className="screen">
@@ -32,14 +34,14 @@ export function ProgressScreen({ state, raw, currentDay }: { state: AppState; ra
 
       <section className="card">
         <h2>By week</h2>
-        {plan.map((w) => (
+        {plan.weeks.map((w) => (
           <ProgressBar key={w.week} label={`Week ${w.week}`} progress={weekProgress(w, state.checked)} />
         ))}
       </section>
 
       <section className="card">
         <h2>By track</h2>
-        {TRACKS.map((t) => (
+        {plan.tracks.map((t) => (
           <ProgressBar key={t} label={t} progress={tracks[t]} />
         ))}
       </section>

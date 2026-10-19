@@ -1,6 +1,7 @@
-import { useEffect, useReducer, useState } from "react";
-import { VALID_IDS } from "../data/plan";
+import { useCallback, useEffect, useReducer, useState } from "react";
+import type { PlanData } from "../data/plan";
 import { toISODate } from "../lib/dates";
+import { clearPlan, loadPlan, reconcileState, savePlan } from "./planStorage";
 import { reducer } from "./reducer";
 import { loadState, memoryStorage, saveState, type KV } from "./storage";
 
@@ -17,8 +18,10 @@ function getStorage(): KV {
 
 export function useAppState() {
   const [storage] = useState(getStorage);
-  const [init] = useState(() => loadState(storage, VALID_IDS));
+  const [initialPlan] = useState(() => loadPlan(storage));
+  const [init] = useState(() => loadState(storage, initialPlan.plan.validIds));
   const [state, dispatch] = useReducer(reducer, init.state);
+  const [loaded, setLoaded] = useState(initialPlan);
   const [recovered, setRecovered] = useState(init.recovered);
   const [saveFailed, setSaveFailed] = useState(false);
 
@@ -30,7 +33,39 @@ export function useAppState() {
     if (!init.existed) void navigator.storage?.persist?.().catch(() => undefined);
   }, [init.existed]);
 
-  return { state, dispatch, recovered, dismissRecovered: () => setRecovered(false), saveFailed };
+  /** Swaps the plan and keeps only the progress and notes that still describe the same task. */
+  const applyPlan = useCallback(
+    (plan: PlanData, source: string, name: string): boolean => {
+      const info = { name, importedAt: new Date().toISOString() };
+      if (!savePlan(storage, source, info)) return false;
+      dispatch({ type: "replace", state: reconcileState(state, loaded.plan, plan).state });
+      setLoaded({ plan, custom: info });
+      return true;
+    },
+    [storage, state, loaded.plan],
+  );
+
+  const restoreBundledPlan = useCallback(
+    (plan: PlanData): boolean => {
+      if (!clearPlan(storage)) return false;
+      dispatch({ type: "replace", state: reconcileState(state, loaded.plan, plan).state });
+      setLoaded({ plan, custom: null });
+      return true;
+    },
+    [storage, state, loaded.plan],
+  );
+
+  return {
+    state,
+    dispatch,
+    plan: loaded.plan,
+    customPlan: loaded.custom,
+    applyPlan,
+    restoreBundledPlan,
+    recovered,
+    dismissRecovered: () => setRecovered(false),
+    saveFailed,
+  };
 }
 
 /** Today's local date; refreshes when the app returns to the foreground or the day rolls over. */

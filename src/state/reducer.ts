@@ -1,9 +1,10 @@
 import type { AppState } from "../types";
-import { SCHEMA_VERSION } from "./storage";
+import { MAX_NOTE_LENGTH, MAX_NOTES_PER_TASK, SCHEMA_VERSION } from "./storage";
 
 export type Action =
   | { type: "toggle"; id: string }
-  | { type: "setNote"; day: number; text: string }
+  | { type: "addNote"; taskId: string; text: string; at: string }
+  | { type: "deleteNote"; taskId: string; index: number }
   | { type: "setStartDate"; date: string }
   | { type: "markBackup"; date: string }
   | { type: "replace"; state: AppState }
@@ -17,11 +18,17 @@ export function reducer(state: AppState, action: Action): AppState {
       else checked[action.id] = true;
       return { ...state, checked };
     }
-    case "setNote": {
+    case "addNote": {
+      const text = action.text.trim().slice(0, MAX_NOTE_LENGTH);
+      const existing = state.notes[action.taskId] ?? [];
+      if (text === "" || existing.length >= MAX_NOTES_PER_TASK) return state;
+      return { ...state, notes: { ...state.notes, [action.taskId]: [...existing, { text, at: action.at }] } };
+    }
+    case "deleteNote": {
+      const list = (state.notes[action.taskId] ?? []).filter((_, i) => i !== action.index);
       const notes = { ...state.notes };
-      const key = String(action.day);
-      if (action.text.trim() === "") delete notes[key];
-      else notes[key] = action.text;
+      if (list.length === 0) delete notes[action.taskId];
+      else notes[action.taskId] = list;
       return { ...state, notes };
     }
     case "setStartDate":

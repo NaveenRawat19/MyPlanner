@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { StartDatePrompt } from "./components/StartDatePrompt";
 import { TabBar, type Tab } from "./components/TabBar";
-import { TOTAL_DAYS } from "./data/plan";
 import { needsBackupReminder } from "./lib/backup";
 import { currentDay, rawDay } from "./lib/dates";
 import { PlanScreen } from "./screens/PlanScreen";
@@ -11,7 +10,8 @@ import { TodayScreen } from "./screens/TodayScreen";
 import { useAppState, useToday } from "./state/useAppState";
 
 export default function App() {
-  const { state, dispatch, recovered, dismissRecovered, saveFailed } = useAppState();
+  const { state, dispatch, plan, customPlan, applyPlan, restoreBundledPlan, recovered, dismissRecovered, saveFailed } =
+    useAppState();
   const today = useToday();
   const [tab, setTab] = useState<Tab>("today");
   const [viewDay, setViewDay] = useState<number | null>(null);
@@ -49,8 +49,8 @@ export default function App() {
 
   const startDate = state.startDate;
   const raw = rawDay(startDate, today);
-  const cur = currentDay(startDate, today, TOTAL_DAYS);
-  const shown = viewDay ?? cur;
+  const cur = currentDay(startDate, today, plan.total);
+  const shown = Math.min(viewDay ?? cur, plan.total);
   const showReminder = tab !== "settings" && !reminderHidden && needsBackupReminder(state, today);
 
   const open = (day: number) => {
@@ -73,11 +73,22 @@ export default function App() {
         </div>
       )}
       {tab === "today" && (
-        <TodayScreen state={state} startDate={startDate} day={shown} raw={raw} dispatch={dispatch} onSelectDay={setViewDay} />
+        <TodayScreen plan={plan} state={state} startDate={startDate} day={shown} raw={raw} dispatch={dispatch} onSelectDay={setViewDay} />
       )}
-      {tab === "plan" && <PlanScreen state={state} startDate={startDate} raw={raw} currentDay={cur} onOpenDay={open} />}
-      {tab === "progress" && <ProgressScreen state={state} raw={raw} currentDay={cur} />}
-      {tab === "settings" && <SettingsScreen state={state} startDate={startDate} today={today} dispatch={dispatch} />}
+      {tab === "plan" && <PlanScreen plan={plan} state={state} startDate={startDate} raw={raw} currentDay={cur} onOpenDay={open} />}
+      {tab === "progress" && <ProgressScreen plan={plan} state={state} raw={raw} currentDay={cur} />}
+      {tab === "settings" && (
+        <SettingsScreen
+          state={state}
+          plan={plan}
+          customPlan={customPlan}
+          startDate={startDate}
+          today={today}
+          dispatch={dispatch}
+          onApplyPlan={applyPlan}
+          onRestoreBundledPlan={restoreBundledPlan}
+        />
+      )}
       <TabBar
         tab={tab}
         onChange={(t) => {

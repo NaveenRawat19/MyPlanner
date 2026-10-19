@@ -1,8 +1,29 @@
 import planJson from "./plan.json";
 import type { Day, Week } from "../types";
 
-export const plan = planJson as Week[];
-export const allDays: Day[] = plan.flatMap((w) => w.days);
-export const TOTAL_DAYS = allDays.length;
-export const VALID_IDS: ReadonlySet<string> = new Set(allDays.flatMap((d) => d.tasks.map((t) => t.id)));
-export const weekOfDay = (day: number): Week | undefined => plan.find((w) => w.days.some((d) => d.day === day));
+export type PlanData = {
+  weeks: Week[];
+  days: Day[];
+  total: number;
+  validIds: ReadonlySet<string>;
+  /** Track names in order of first appearance. */
+  tracks: string[];
+};
+
+export function makePlan(weeks: Week[]): PlanData {
+  const days = weeks.flatMap((w) => w.days);
+  const tasks = days.flatMap((d) => d.tasks);
+  return {
+    weeks,
+    days,
+    total: days.length,
+    validIds: new Set(tasks.map((t) => t.id)),
+    tracks: [...new Set(tasks.map((t) => t.track))],
+  };
+}
+
+/** The plan shipped with the app (built from data/plan-source.md). */
+export const bundledPlan: PlanData = makePlan(planJson as Week[]);
+
+export const weekOfDay = (plan: PlanData, day: number): Week | undefined =>
+  plan.weeks.find((w) => w.days.some((d) => d.day === day));

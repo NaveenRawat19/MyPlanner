@@ -1,10 +1,11 @@
 import { isISODate } from "../lib/dates";
-import type { AppState } from "../types";
+import type { AppState, Note } from "../types";
 
-export const SCHEMA_VERSION = 1;
+export const SCHEMA_VERSION = 2;
 export const STORAGE_KEY = "prep-tracker:v1";
 export const CORRUPT_KEY = "prep-tracker:corrupt-backup";
-export const MAX_NOTE_LENGTH = 200;
+export const MAX_NOTE_LENGTH = 500;
+export const MAX_NOTES_PER_TASK = 100;
 
 export type KV = Pick<Storage, "getItem" | "setItem" | "removeItem">;
 export type Validation = { ok: true; state: AppState } | { ok: false; error: string };
@@ -20,8 +21,23 @@ export const defaultState = (): AppState => ({
 type Obj = Record<string, unknown>;
 const isObj = (v: unknown): v is Obj => typeof v === "object" && v !== null && !Array.isArray(v);
 
-/** Upgrades older schema versions step by step. Empty until a v2 exists. */
-const MIGRATIONS: Record<number, (s: Obj) => Obj> = {};
+/**
+ * Upgrades older schema versions step by step.
+ * v1 -> v2: one note per day (keyed by day number) became a list of notes per task. v1 only ever
+ * existed with the bundled plan, whose first task each day is DSA, so day notes move to that task.
+ */
+const MIGRATIONS: Record<number, (s: Obj) => Obj> = {
+  1: (s) => {
+    const notes: Record<string, unknown> = {};
+    if (isObj(s.notes)) {
+      for (const [day, text] of Object.entries(s.notes)) {
+        if (typeof text !== "string" || text.trim() === "") continue;
+        notes[`d${day}-dsa`] = [{ text: text.slice(0, MAX_NOTE_LENGTH), at: "" }];
+      }
+    }
+    return { ...s, schemaVersion: 2, notes };
+  },
+};
 
 export function migrate(raw: unknown): unknown {
   if (!isObj(raw)) return raw;
@@ -34,7 +50,7 @@ export function migrate(raw: unknown): unknown {
   return s;
 }
 
-export function validateState(raw: unknown, validIds: ReadonlySet<string>, totalDays = 56): Validation {
+export function validateState(raw: unknown, validIds: ReadonlySet<string>): Validation {
   const s = migrate(raw);
   if (!isObj(s)) return { ok: false, error: "Not an object" };
   if (typeof s.schemaVersion !== "number") return { ok: false, error: "Missing schemaVersion" };
@@ -51,14 +67,21 @@ export function validateState(raw: unknown, validIds: ReadonlySet<string>, total
     checked[id] = true;
   }
   if (!isObj(s.notes)) return { ok: false, error: "Invalid notes" };
-  const notes: Record<string, string> = {};
-  for (const [k, v] of Object.entries(s.notes)) {
-    const day = Number(k);
-    if (!Number.isInteger(day) || day < 1 || day > totalDays || String(day) !== k) {
-      return { ok: false, error: `Invalid note day "${k}"` };
+  const notes: Record<string, Note[]> = {};
+  for (const [id, list] of Object.entries(s.notes)) {
+    if (!validIds.has(id)) return { ok: false, error: `Note for unknown task "${id}"` };
+    if (!Array.isArray(list) || list.length > MAX_NOTES_PER_TASK) return { ok: false, error: `Invalid notes for "${id}"` };
+    const clean: Note[] = [];
+    for (const n of list) {
+      if (!isObj(n) || typeof n.text !== "string" || typeof n.at !== "string") {
+        return { ok: false, error: `Invalid note for "${id}"` };
+      }
+      if (n.text.trim() === "" || n.text.length > MAX_NOTE_LENGTH || n.at.length > 40) {
+        return { ok: false, error: `Invalid note for "${id}"` };
+      }
+      clean.push({ text: n.text, at: n.at });
     }
-    if (typeof v !== "string" || v.length > MAX_NOTE_LENGTH) return { ok: false, error: `Invalid note for day ${k}` };
-    notes[k] = v;
+    if (clean.length > 0) notes[id] = clean;
   }
   return {
     ok: true,

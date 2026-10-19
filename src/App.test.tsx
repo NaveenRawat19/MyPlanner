@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { cleanup, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import App from "./App";
 import { CORRUPT_KEY, STORAGE_KEY } from "./state/storage";
 
@@ -13,6 +13,12 @@ afterEach(() => {
   cleanup();
   vi.useRealTimers();
 });
+
+function addNote(track: string, text: string) {
+  fireEvent.change(screen.getByLabelText(`Note for ${track} task`), { target: { value: text } });
+  const form = screen.getByLabelText(`Note for ${track} task`).closest("form")!;
+  fireEvent.click(within(form).getByRole("button", { name: "Submit" }));
+}
 
 function start() {
   render(<App />);
@@ -29,15 +35,32 @@ describe("App", () => {
   it("persists ticks, notes and the start date across a reload", () => {
     start();
     fireEvent.click(screen.getAllByRole("checkbox")[0]);
-    fireEvent.change(screen.getByLabelText(/Note for this day/), { target: { value: "redo it" } });
+    addNote("DSA", "redo it");
     cleanup();
 
     render(<App />);
     expect((screen.getAllByRole("checkbox")[0] as HTMLInputElement).checked).toBe(true);
-    expect((screen.getByLabelText(/Note for this day/) as HTMLInputElement).value).toBe("redo it");
+    expect(screen.getByText("redo it")).toBeTruthy();
     expect(screen.getByText("1 of 4 done")).toBeTruthy();
   });
 
+  it("submits notes with a button and shows them below the task they belong to", () => {
+    start();
+    const submit = screen.getAllByRole("button", { name: "Submit" })[0] as HTMLButtonElement;
+    expect(submit.disabled).toBe(true);
+    addNote("DSA", "first");
+    addNote("DSA", "second");
+    addNote("HLD", "hld note");
+    const tasks = screen.getAllByRole("listitem").filter((li) => li.classList.contains("task"));
+    expect(within(tasks[0]).getAllByText(/first|second/).map((n) => n.textContent)).toEqual(["first", "second"]);
+    expect(within(tasks[1]).getByText("hld note")).toBeTruthy();
+    expect(within(tasks[0]).queryByText("hld note")).toBeNull();
+    expect((screen.getByLabelText("Note for DSA task") as HTMLInputElement).value).toBe("");
+
+    fireEvent.click(within(tasks[0]).getByRole("button", { name: "Delete note: first" }));
+    expect(within(tasks[0]).queryByText("first")).toBeNull();
+    expect(within(tasks[0]).getByText("second")).toBeTruthy();
+  });
   it("navigates days and opens external links safely", () => {
     start();
     fireEvent.click(screen.getByRole("button", { name: "Next day" }));
@@ -89,5 +112,55 @@ describe("App", () => {
     confirm.mockReturnValueOnce(true);
     fireEvent.click(screen.getByRole("button", { name: "Reset all progress" }));
     expect(JSON.parse(localStorage.getItem(STORAGE_KEY)!).checked).toEqual({});
+  });
+
+  it("imports a plan file and rebuilds the checklist, plan and progress from it", async () => {
+    start();
+    fireEvent.click(screen.getAllByRole("checkbox")[0]);
+    fireEvent.click(screen.getByRole("button", { name: "Settings" }));
+    vi.spyOn(window, "confirm").mockReturnValue(true);
+    const text = `### Week 1: Only week
+
+**Day 1**
+
+- [ ] **Read:** [Book](https://example.com/book) chapter 1
+- [ ] **Write:** an essay
+
+**Day 2**
+
+- [ ] **Read:** chapter 2
+`;
+    const file = new File([text], "my-plan.txt", { type: "text/plain" });
+    fireEvent.change(screen.getByLabelText("Import plan file"), { target: { files: [file] } });
+    await waitFor(() => expect(screen.getByText(/Plan imported: 2 days, 3 tasks/)).toBeTruthy());
+    expect(screen.getByText("my-plan.txt")).toBeTruthy();
+
+    fireEvent.click(screen.getByRole("button", { name: "Today" }));
+    expect(screen.getAllByRole("checkbox")).toHaveLength(2);
+    expect(screen.getByText("Write")).toBeTruthy();
+    expect(screen.getByRole("button", { name: "Next day" })).toBeTruthy();
+    fireEvent.click(screen.getByRole("button", { name: "Next day" }));
+    expect(screen.getAllByRole("checkbox")).toHaveLength(1);
+    expect((screen.getByRole("button", { name: "Next day" }) as HTMLButtonElement).disabled).toBe(true);
+
+    fireEvent.click(screen.getByRole("button", { name: "Progress" }));
+    expect(screen.getByText("Write")).toBeTruthy();
+    expect(screen.queryByText("DSA")).toBeNull();
+    expect(screen.getAllByText(/^Week \d/)).toHaveLength(1);
+
+    const stored = JSON.parse(localStorage.getItem(STORAGE_KEY)!);
+    expect(stored.checked).toEqual({}); // d1-dsa no longer exists
+    cleanup();
+    render(<App />); // the imported plan survives a reload
+    expect(screen.getAllByRole("checkbox")).toHaveLength(2);
+  });
+
+  it("rejects an invalid plan file with a clear message and keeps the current plan", async () => {
+    start();
+    fireEvent.click(screen.getByRole("button", { name: "Settings" }));
+    const file = new File(["### Week 1: t\n**Day 2**\n- [ ] **A:** x"], "bad.txt", { type: "text/plain" });
+    fireEvent.change(screen.getByLabelText("Import plan file"), { target: { files: [file] } });
+    await waitFor(() => expect(screen.getByText(/Plan rejected\. Line 2: Day numbers/)).toBeTruthy());
+    expect(screen.getByText(/8 weeks, 56 days, 224 tasks/)).toBeTruthy();
   });
 });

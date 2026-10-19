@@ -19,10 +19,18 @@ describe("reducer", () => {
     expect(a.checked).toEqual({ "d1-dsa": true });
     expect(reducer(a, { type: "toggle", id: "d1-dsa" }).checked).toEqual({});
   });
-  it("sets and clears notes", () => {
-    const a = reducer(defaultState(), { type: "setNote", day: 3, text: "hello" });
-    expect(a.notes).toEqual({ "3": "hello" });
-    expect(reducer(a, { type: "setNote", day: 3, text: "  " }).notes).toEqual({});
+  it("adds notes per task, in order, ignoring blanks", () => {
+    let s = reducer(defaultState(), { type: "addNote", taskId: "d1-dsa", text: "  hello ", at: "t1" });
+    s = reducer(s, { type: "addNote", taskId: "d1-dsa", text: "again", at: "t2" });
+    expect(s.notes).toEqual({ "d1-dsa": [{ text: "hello", at: "t1" }, { text: "again", at: "t2" }] });
+    expect(reducer(s, { type: "addNote", taskId: "d1-dsa", text: "   ", at: "t3" })).toBe(s);
+  });
+  it("deletes a note and drops the empty list", () => {
+    let s = reducer(defaultState(), { type: "addNote", taskId: "d1-dsa", text: "a", at: "t1" });
+    s = reducer(s, { type: "addNote", taskId: "d1-dsa", text: "b", at: "t2" });
+    s = reducer(s, { type: "deleteNote", taskId: "d1-dsa", index: 0 });
+    expect(s.notes).toEqual({ "d1-dsa": [{ text: "b", at: "t2" }] });
+    expect(reducer(s, { type: "deleteNote", taskId: "d1-dsa", index: 0 }).notes).toEqual({});
   });
   it("reset keeps the start date only", () => {
     let s = reducer(defaultState(), { type: "setStartDate", date: "2026-10-16" });
@@ -35,7 +43,7 @@ describe("reducer", () => {
 describe("persistence", () => {
   it("round-trips state", () => {
     const kv = memoryStorage();
-    const s = { ...defaultState(), startDate: "2026-10-16", checked: { "d1-dsa": true as const }, notes: { "1": "n" } };
+    const s = { ...defaultState(), startDate: "2026-10-16", checked: { "d1-dsa": true as const }, notes: { "d1-dsa": [{ text: "n", at: "2026-10-16T09:00:00.000Z" }] } };
     expect(saveState(kv, s)).toBe(true);
     const r = loadState(kv, ids);
     expect(r).toEqual({ state: s, existed: true, recovered: false });
@@ -81,6 +89,12 @@ describe("persistence", () => {
 describe("validateState", () => {
   const ok = defaultState();
   it("accepts a valid state", () => expect(validateState(ok, ids).ok).toBe(true));
+  it("migrates v1 day notes onto the first task of that day", () => {
+    const v1 = { schemaVersion: 1, startDate: "2026-10-16", checked: { "d1-hld": true }, notes: { "1": "old note", "2": " " }, lastBackup: null };
+    const r = validateState(v1, ids);
+    expect(r.ok).toBe(true);
+    if (r.ok) expect(r.state).toEqual({ ...ok, startDate: "2026-10-16", checked: { "d1-hld": true }, notes: { "d1-dsa": [{ text: "old note", at: "" }] } });
+  });
   it.each([
     ["non-object", 5],
     ["no version", { ...ok, schemaVersion: undefined }],
@@ -88,8 +102,10 @@ describe("validateState", () => {
     ["bad date", { ...ok, startDate: "2026-13-01" }],
     ["unknown id", { ...ok, checked: { x: true } }],
     ["false check", { ...ok, checked: { "d1-dsa": false } }],
-    ["bad note day", { ...ok, notes: { "57": "x" } }],
-    ["long note", { ...ok, notes: { "1": "x".repeat(201) } }],
+    ["note for unknown task", { ...ok, notes: { zzz: [{ text: "x", at: "" }] } }],
+    ["long note", { ...ok, notes: { "d1-dsa": [{ text: "x".repeat(501), at: "" }] } }],
+    ["blank note", { ...ok, notes: { "d1-dsa": [{ text: " ", at: "" }] } }],
+    ["string notes (v1 shape)", { ...ok, notes: { "d1-dsa": "x" } }],
     ["array", []],
   ])("rejects %s", (_n, v) => expect(validateState(v, ids).ok).toBe(false));
 });
@@ -107,7 +123,7 @@ describe("backup", () => {
   it("rejects bad imports", () => {
     expect(parseImport("nope", ids).ok).toBe(false);
     expect(parseImport("{}", ids).ok).toBe(false);
-    expect(parseImport(JSON.stringify({ app: "prep-tracker", state: { schemaVersion: 1 } }), ids).ok).toBe(false);
+    expect(parseImport(JSON.stringify({ app: "prep-tracker", state: { schemaVersion: 2 } }), ids).ok).toBe(false);
   });
 
   it("reminds only when stale and there is progress", () => {

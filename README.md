@@ -22,7 +22,41 @@ Other scripts:
 - `npm run parse` regenerates `src/data/plan.json` from `data/plan-source.md`. It fails unless there are exactly 56 days with 4 tasks each. It runs automatically before `dev` and `build`.
 - `npm run icons` regenerates the placeholder PNG icons in `public/icons/` (no external assets; the output is committed).
 
-To change the plan, edit `data/plan-source.md` (everything before the "8-week daily plan" heading is ignored).
+To change the built-in plan, edit `data/plan-source.md` (everything before the "N-week daily plan" heading is ignored). You can also swap the plan at runtime without rebuilding: see below.
+
+## Import your own plan
+
+**Settings > Plan > Import plan (.txt)** replaces the plan with a text file in this format (the same Markdown subset as `data/plan-source.md`). **Download current plan as .txt** gives you a ready-made file to edit.
+
+```text
+### Week 1: Arrays and hashing
+
+**Day 1**
+
+- [ ] **DSA:** [Two Sum](https://leetcode.com/problems/two-sum/) (hashing)
+- [ ] **HLD:** Read about load balancing
+
+**Day 2 (review)**
+
+- [ ] **DSA:** Redo yesterday's problem
+- [ ] **HLD:** Redo one design
+```
+
+Rules:
+
+- `### Week N: title` starts a week. Weeks are numbered 1, 2, 3, ... in order.
+- `**Day N**` or `**Day N (label)**` starts a day. Days are numbered 1, 2, 3, ... continuously across weeks. A label containing "review" marks a review day.
+- `- [ ] **TRACK:** text` is a task. The track is any short name (DSA, HLD, Reading, ...); every day needs at least one task, and any number of tasks per day is fine. `[label](https://...)` links become buttons (only http and https links are accepted).
+- Lines that match none of these, and anything before an optional `## N-week daily plan` heading, are ignored.
+- Errors are reported with the offending line number and nothing is changed.
+
+**Generate a plan with AI:** Settings > Plan > "Generate a plan with AI" has a copy-ready prompt (source: `src/lib/planPrompt.ts`) that works for tech interviews, UPSC or any other exam or skill, with suggested tracks and sources for the first two. Paste it into ChatGPT, Claude or Gemini, fill in the bracketed field, duration, daily time and tracks, save the reply as a `.txt` file and import it. Track names are free text (up to 24 characters, e.g. `GS2`, `Current Affairs`); tracks outside DSA/HLD/LLD/AI get an automatic badge colour.
+
+On import the app builds the day-wise checklist, Plan and Progress tabs (overall, by week, by track) from the file. Ticks and notes are kept for tasks whose id (`d<day>-<track>`), track and text are unchanged; the confirmation dialog tells you what would be removed. The imported plan is stored in `localStorage`; **Use built-in plan** switches back.
+
+## Notes
+
+Every task has its own notes: type in the box under the task and press **Submit** (or Enter). Notes are listed below the task with a timestamp, can be added repeatedly and deleted individually. They are stored in `localStorage` with the rest of your progress and included in exports.
 
 ## Test on your iPhone during development
 
@@ -48,5 +82,5 @@ The Vite `base` is `./` and the manifest uses `start_url: "./"` and `scope: "./"
 ## Your data
 
 - Progress is stored on the device. iOS can clear website data for sites you haven't used for a while, and the Home Screen app and Safari have **separate** storage.
-- Use **Settings > Export progress** regularly (the app reminds you after 7 days) and **Import progress** to restore.
+- Use **Settings > Export progress** regularly (the app reminds you after 7 days) and **Import progress** to restore. A progress backup does not contain an imported plan: keep the plan `.txt` too and import it first when restoring on a fresh browser.
 - If saved data is ever unreadable, the app starts fresh and keeps a copy of the old data in `localStorage` under `prep-tracker:corrupt-backup`.

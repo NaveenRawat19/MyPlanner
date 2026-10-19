@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { plan } from "../data/plan";
+import type { PlanData } from "../data/plan";
 import { addDays, formatDate } from "../lib/dates";
 import { doneCount, isMissed, weekProgress } from "../lib/progress";
-import { TRACKS, type AppState, type Day } from "../types";
+import type { AppState, Day } from "../types";
 
 type Props = {
+  plan: PlanData;
   state: AppState;
   startDate: string;
   raw: number;
@@ -14,17 +15,17 @@ type Props = {
 
 function Dots({ day, state }: { day: Day; state: AppState }) {
   return (
-    <span className="dots" role="img" aria-label={`${doneCount(day, state.checked)} of 4 tasks done`}>
-      {day.tasks.map((t, i) => (
-        <span key={t.id} className={`dot${state.checked[t.id] ? " on" : ""}`} title={TRACKS[i]} />
+    <span className="dots" role="img" aria-label={`${doneCount(day, state.checked)}     of ${day.tasks.length} tasks done`}>
+          {day.tasks.map((t) => (
+            <span key={t.id} className={`dot${state.checked[t.id] ? " on" : ""}`} title={t.track} />
       ))}
     </span>
   );
 }
 
-export function PlanScreen({ state, startDate, raw, currentDay, onOpenDay }: Props) {
+export function PlanScreen({ plan, state, startDate, raw, currentDay, onOpenDay }: Props) {
   const [open, setOpen] = useState<ReadonlySet<number>>(
-    () => new Set([plan.find((w) => w.days.some((d) => d.day === currentDay))?.week ?? 1]),
+    () => new Set([plan.weeks.find((w) => w.days.some((d) => d.day === currentDay))?.week ?? 1]),
   );
   const toggle = (w: number) =>
     setOpen((prev) => {
@@ -37,7 +38,7 @@ export function PlanScreen({ state, startDate, raw, currentDay, onOpenDay }: Pro
   return (
     <main className="screen">
       <h1>Plan</h1>
-      {plan.map((week) => {
+      {plan.weeks.map((week) => {
         const isOpen = open.has(week.week);
         const wp = weekProgress(week, state.checked);
         const panelId = `week-${week.week}`;
@@ -59,7 +60,7 @@ export function PlanScreen({ state, startDate, raw, currentDay, onOpenDay }: Pro
               <ul id={panelId} className="days">
                 {week.days.map((d) => {
                   const missed = isMissed(d, state.checked, raw);
-                  const isToday = d.day === currentDay && raw >= 1 && raw <= 56;
+                  const isToday = d.day === currentDay && raw >= 1 && raw <= plan.total;
                   return (
                     <li key={d.day}>
                       <button

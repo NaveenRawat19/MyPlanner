@@ -1,4 +1,4 @@
-import { TRACKS, type Checked, type Day, type Progress, type Track, type Week } from "../types";
+import type { Checked, Day, Progress, Track, Week } from "../types";
 
 const toProgress = (done: number, total: number): Progress => ({
   done,
@@ -24,8 +24,8 @@ export function weekProgress(week: Week, checked: Checked): Progress {
 
 export function trackProgress(plan: Week[], checked: Checked): Record<Track, Progress> {
   const tasks = plan.flatMap((w) => w.days.flatMap((d) => d.tasks));
-  const out = {} as Record<Track, Progress>;
-  for (const track of TRACKS) {
+  const out: Record<Track, Progress> = {};
+  for (const track of new Set(tasks.map((t) => t.track))) {
     const of = tasks.filter((t) => t.track === track);
     out[track] = toProgress(of.filter((t) => checked[t.id]).length, of.length);
   }

@@ -1,5 +1,5 @@
-export type Track = "DSA" | "HLD" | "LLD" | "AI";
-export const TRACKS: readonly Track[] = ["DSA", "HLD", "LLD", "AI"];
+/** Free-form track name from the plan file (e.g. "DSA", "HLD"). */
+export type Track = string;
 
 export type Task = {
   id: string;
@@ -12,12 +12,15 @@ export type Week = { week: number; title: string; days: Day[] };
 
 export type Checked = Readonly<Record<string, true>>;
 
+export type Note = { text: string; at: string };
+/** Notes keyed by task id, oldest first. */
+export type Notes = Readonly<Record<string, readonly Note[]>>;
+
 export type AppState = {
   schemaVersion: number;
   startDate: string | null;
   checked: Checked;
-  /** keyed by day number as a string */
-  notes: Readonly<Record<string, string>>;
+  notes: Notes;
   lastBackup: string | null;
 };
 
