@@ -1,7 +1,22 @@
 import { describe, expect, it } from "vitest";
-import { addDays, clampDay, currentDay, isISODate, rawDay, toISODate } from "./dates";
+import { addDays, clampDay, currentDay, isISODate, monthGrid, rawDay, shiftMonth, toISODate } from "./dates";
 
 describe("dates", () => {
+  it("builds Monday-first month grids", () => {
+    const grid = monthGrid("2026-06-15");
+    expect(grid[0][0]).toBe("2026-06-01");
+    expect(grid).toHaveLength(5);
+    expect(grid[4][6]).toBe("2026-07-05");
+    const feb = monthGrid("2026-02-10");
+    expect(feb).toHaveLength(5);
+    expect(feb[0][0]).toBe("2026-01-26");
+  });
+
+  it("shifts months", () => {
+    expect(shiftMonth("2026-01-31", -1)).toBe("2025-12-01");
+    expect(shiftMonth("2026-12-15", 1)).toBe("2027-01-01");
+  });
+
   it("validates ISO dates", () => {
     expect(isISODate("2026-02-28")).toBe(true);
     expect(isISODate("2026-02-30")).toBe(false);

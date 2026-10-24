@@ -4,6 +4,7 @@ import { StartDatePrompt } from "./components/StartDatePrompt";
 import { TabBar, type Tab } from "./components/TabBar";
 import { needsBackupReminder } from "./lib/backup";
 import { currentDay, rawDay } from "./lib/dates";
+import { CalendarScreen } from "./screens/CalendarScreen";
 import { PlanScreen } from "./screens/PlanScreen";
 import { ProgressScreen } from "./screens/ProgressScreen";
 import { SettingsScreen } from "./screens/SettingsScreen";
@@ -96,6 +97,7 @@ export default function App() {
       {tab === "today" && (
         <TodayScreen plan={plan} state={state} startDate={startDate} day={shown} raw={raw} dispatch={dispatch} onSelectDay={setViewDay} />
       )}
+      {tab === "calendar" && <CalendarScreen plan={plan} state={state} startDate={startDate} today={today} onOpenDay={open} />}
       {tab === "plan" && <PlanScreen plan={plan} state={state} startDate={startDate} raw={raw} currentDay={cur} onOpenDay={open} />}
       {tab === "progress" && <ProgressScreen plan={plan} state={state} raw={raw} currentDay={cur} />}
       {tab === "settings" && (

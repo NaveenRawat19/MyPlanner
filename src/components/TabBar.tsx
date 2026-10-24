@@ -1,8 +1,9 @@
-export type Tab = "today" | "plan" | "progress" | "settings";
+export type Tab = "today" | "plan" | "calendar" | "progress" | "settings";
 
 const TABS: { id: Tab; label: string; icon: string }[] = [
   { id: "today", label: "Today", icon: "✓" },
-  { id: "plan", label: "Plan", icon: "▦" },
+  { id: "calendar", label: "Calendar", icon: "▣" },
+  { id: "plan", label: "Plan", icon: "☰" },
   { id: "progress", label: "Progress", icon: "◔" },
   { id: "settings", label: "Settings", icon: "⚙" },
 ];
