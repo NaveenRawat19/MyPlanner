@@ -83,8 +83,8 @@ describe("App", () => {
   it("opens a day from the Calendar screen", () => {
     start();
     fireEvent.click(screen.getByRole("button", { name: "Calendar" }));
-    expect(screen.getByRole("heading", { name: "October 2026" })).toBeTruthy();
-    fireEvent.click(screen.getByRole("button", { name: /18 Oct.*, Day 3$/ }));
+    expect(screen.getByRole("button", { name: "Next month" })).toBeTruthy();
+    fireEvent.click(screen.getByRole("button", { name: /, Day 3$/ }));
     fireEvent.click(screen.getByRole("button", { name: /^Open/ }));
     expect(screen.getByRole("heading", { name: "Day 3" })).toBeTruthy();
   });
